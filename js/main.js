@@ -65,6 +65,7 @@ $(document).on('ready', function () {
 	// Menu icon clicked
 	menuIcon.on('click', function () {
 		menuIcon.toggleClass('menu-visible');
+	
 		menuBlock.toggleClass('menu-visible');
 		menuItems.toggleClass('menu-visible');
 		reactToMenu.toggleClass('menu-visible');
@@ -204,8 +205,8 @@ $(document).on('ready', function () {
 
 					// init contact form
 					// Default server url
-					var newsletterServerUrl = './ajaxserver/serverfile.php';
-					var messageServerUrl = './ajaxserver/serverfile.php';
+					var newsletterServerUrl = './ajaxserver/server.php';
+					var messageServerUrl = './ajaxserver/server.php';
 
 					// Use form define action attribute
 					if (sendEmailForm.attr('action') && (sendEmailForm.attr('action')) != '') {

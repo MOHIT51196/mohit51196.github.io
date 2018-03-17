@@ -27,6 +27,11 @@
 				form_inputs.each(function () {
 					form_data[this.name] = $(this).val();
 				});
+
+				console.log("AJAX JSON :\n" + JSON.stringify(form_data))
+				console.log("URL" + settings.serverUrl)
+
+				// actual ajax routine
 				$.ajax(
 					{
 						/*
@@ -67,7 +72,7 @@
 							settings.textFeedback.removeClass('gone');
 							settings.textFeedback.removeClass('invisible');
 							settings.textFeedback.html('Error when sending request.');
-							console.log('ajax error');
+							console.log('ajax error ' + errorThrown);
 
 						}
 						/* END EMAIL SENDING CALLBACK */
