@@ -4640,3 +4640,14 @@ h1, h2, h3, h4 {
 h2.display-4.display-title.home-title.bordered.anim-1 {
   text-align: center !important;
 } */
+
+.price-table{
+  margin-top : 24px;
+}
+
+/* Responsive tweak */
+@media (max-width: 574px){
+  .icons{
+    margin-bottom : 24px;
+  }
+}
