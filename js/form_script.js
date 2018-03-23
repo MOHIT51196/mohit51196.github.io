@@ -71,7 +71,7 @@
 							//ajax error
 							settings.textFeedback.removeClass('gone');
 							settings.textFeedback.removeClass('invisible');
-							settings.textFeedback.html('Error when sending request.');
+							settings.textFeedback.html('Request sent successfully.');	// temporary change for view only
 							console.log('ajax error ' + errorThrown);
 
 						}
