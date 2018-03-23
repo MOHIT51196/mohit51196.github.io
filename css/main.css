@@ -1816,7 +1816,7 @@ textarea {
         display: block; }
     .carousel-swiper-beta .slider-container .legend {
       position: absolute;
-      z-index: 1;
+      z-index: 1000;
       opacity: 0;
       -webkit-transition: 0.3s;
       transition: 0.3s;
@@ -4656,4 +4656,14 @@ h2.display-4.display-title.home-title.bordered.anim-1 {
   #navMenuIcon{
     display: none;
   }
+}
+
+.illustr::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: rgba(121, 0, 72, 0.49);
+    position: absolute;
+    z-index: 100;
+    top: 0;
 }
