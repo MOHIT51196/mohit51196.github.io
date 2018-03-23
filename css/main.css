@@ -4651,3 +4651,9 @@ h2.display-4.display-title.home-title.bordered.anim-1 {
     margin-bottom : 24px;
   }
 }
+
+@media (min-width: 768px) {
+  #navMenuIcon{
+    display: none;
+  }
+}
