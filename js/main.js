@@ -231,12 +231,8 @@
   }
 
   function renderFooter() {
-    if (el('footerYear')) {
-      el('footerYear').textContent = 'Copyright © ' + new Date().getFullYear();
-    }
-
-    var host = el('footerSocials');
-    if (!host || !C.profile.socials) return;
+    var host = el('siteFooter');
+    if (!host) return;
 
     var icons = {
       linkedin:
@@ -257,14 +253,15 @@
         '</svg>',
     };
 
+    var socials = C.profile.socials || {};
     var order = [
-      ['LinkedIn', 'linkedin', C.profile.socials.linkedin],
-      ['GitHub', 'github', C.profile.socials.github],
-      ['Medium', 'medium', C.profile.socials.medium],
-      ['Twitter', 'twitter', C.profile.socials.twitter],
+      ['LinkedIn', 'linkedin', socials.linkedin],
+      ['GitHub', 'github', socials.github],
+      ['Medium', 'medium', socials.medium],
+      ['Twitter', 'twitter', socials.twitter],
     ];
 
-    host.innerHTML = order
+    var socialHtml = order
       .filter(function (s) { return !!s[2]; })
       .map(function (s) {
         return (
@@ -275,6 +272,13 @@
         );
       })
       .join('');
+
+    host.innerHTML =
+      '<div class="footer__copy">' +
+        '<span>Designed &amp; built by hand.</span>' +
+        '<span>Copyright © ' + new Date().getFullYear() + '</span>' +
+      '</div>' +
+      '<nav class="footer__socials" aria-label="Social links">' + socialHtml + '</nav>';
   }
 
   /* ---------- Code widget (article pages) ----------

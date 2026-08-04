@@ -90,14 +90,7 @@ function navHtml() {
 }
 
 function footerHtml() {
-  return `  <footer class="footer">
-    <span class="footer__spacer" aria-hidden="true"></span>
-    <span class="footer__center">
-      <span>Designed &amp; built by hand.</span>
-      <span id="footerYear"></span>
-    </span>
-    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
-  </footer>`;
+  return `  <footer class="footer" id="siteFooter"></footer>`;
 }
 
 function pageShellOpen(meta) {
