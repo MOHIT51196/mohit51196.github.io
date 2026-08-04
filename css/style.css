@@ -2062,6 +2062,7 @@ html.js [data-reveal].is-in {
   .hero__actions .btn { width: 100%; text-align: center; }
   .hero__scroll { display: none; }
   .hero__meta { font-size: 0.7rem; gap: 0.6rem 1.2rem; }
+  .ticker__label { padding: 0 0.65rem; font-size: 0.6rem; letter-spacing: 0.1em; }
   .footer {
     grid-template-columns: 1fr;
     justify-items: center;
