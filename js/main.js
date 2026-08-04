@@ -56,7 +56,6 @@
     });
 
     el('heroMeta').innerHTML =
-      '<span>Currently <b>@ ' + C.profile.company + '</b></span>' +
       C.profile.identities.map(function (identity) {
         return '<span>' + identity + '</span>';
       }).join('');
