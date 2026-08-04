@@ -228,22 +228,11 @@
     var email = el('contactEmail');
     email.textContent = C.profile.email;
     email.href = 'mailto:' + C.profile.email;
-
-    var socials = [];
-    if (C.profile.socials.linkedin) socials.push(['LinkedIn', C.profile.socials.linkedin]);
-    if (C.profile.socials.github) socials.push(['GitHub', C.profile.socials.github]);
-    if (C.profile.socials.medium) socials.push(['Medium', C.profile.socials.medium]);
-    if (C.profile.socials.twitter) socials.push(['Twitter', C.profile.socials.twitter]);
-    if (C.profile.resumeUrl) socials.push(['Résumé', C.profile.resumeUrl]);
-
-    el('contactSocials').innerHTML = socials.map(function (s) {
-      return '<a href="' + s[1] + '" target="_blank" rel="noopener" data-hover>' + s[0] + '</a>';
-    }).join('');
   }
 
   function renderFooter() {
     if (el('footerYear')) {
-      el('footerYear').textContent = '© ' + new Date().getFullYear();
+      el('footerYear').textContent = 'Copyright © ' + new Date().getFullYear();
     }
 
     var host = el('footerSocials');
