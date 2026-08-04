@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Cloud Architecture Patterns You Should Know · Mohit Malhotra</title>
+  <meta name="description" content="Famous architectural patterns for designing scalable and secure cloud solution" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/5-cloud-architecture-patterns-you-should-know-79526c9cfc0e" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="5 Cloud Architecture Patterns You Should Know" />
+  <meta property="og:description" content="Famous architectural patterns for designing scalable and secure cloud solution" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Cloud</span></div>
+      <h1 class="article__title">5 Cloud Architecture Patterns You Should Know</h1>
+      <p class="article__subtitle">Famous architectural patterns for designing scalable and secure cloud solution</p>
+      <div class="article__meta">
+        <span>Oct 10, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="29e7" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="716a" id="716a" class="graf graf--p graf-after--h3">Famous architectural patterns for designing scalable and secure cloud solution</p><figure name="b225" id="b225" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*_X0VV4QUpMKmHV_z" data-width="5300" data-height="3975" src="../assets/blog/5-cloud-architecture-patterns-you-should-know/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@austindistel?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@austindistel?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Austin Distel</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><h3 name="9d44" id="9d44" class="graf graf--h3 graf-after--figure">Federated identity</h3><p name="36ae" id="36ae" class="graf graf--p graf-after--h3 graf--trailing">The Federated Identity Cloud Design Pattern is a sophisticated yet user-friendly approach to managing user access in the cloud. Think of it as having a master key for multiple doors. Instead of remembering separate passwords for each online service, users log in once with a trusted identity provider. This provider vouches for their identity by issuing a secure token. This token acts like a virtual key that grants access to authorized resources across various services and applications. It’s like having one key to open all your favorite online doors, making it incredibly convenient for users. Behind the scenes, this pattern relies on established security protocols like SAML or OAuth, ensuring that the process is not only convenient but also highly secure. It simplifies user access management, enhances security, and enables Single Sign-On (SSO), making it a crucial tool for modern cloud-based applications and services.</p></div></div></section><section name="3d6e" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0eb4" id="0eb4" class="graf graf--h3 graf--leading">Valet Key</h3><p name="29a3" id="29a3" class="graf graf--p graf-after--h3 graf--trailing">The Valet Key Cloud Design Pattern is a clever architectural approach that mirrors the concept of a valet key in the world of cloud computing. Similar to how a valet key grants limited access to a vehicle, this pattern enables controlled and temporary access to specific cloud resources. Instead of providing full access credentials, users or applications are granted a temporary and restricted key to access only the necessary resources for a specific task or time frame. This restricted access reduces the risk of unauthorized usage and ensures that critical resources remain protected. The Valet Key Pattern enhances security by minimizing the exposure of sensitive cloud assets and is particularly valuable in scenarios where fine-grained control over permissions and resource utilization is essential. It’s a valuable addition to the cloud security toolbox, providing a level of control and access management that is both precise and temporary.</p></div></div></section><section name="1b2a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="a9f8" id="a9f8" class="graf graf--h3 graf--leading">Retry &amp; Circuit breakers</h3><p name="1c5a" id="1c5a" class="graf graf--p graf-after--h3 graf--trailing">The retry &amp; circuit breaker cloud design pattern is a great strategy for ensuring the resilience and robustness of applications in a distributed and often unreliable cloud environment. At its core, this pattern is all about handling network or service failures gracefully. When a request to an external service or resource fails, the retry mechanism automatically attempts the request again after a short delay, hoping that the issue was a transient glitch. If the problem persists, the circuit breaker mechanism comes into play. It’s like a safety switch that temporarily stops making further requests to the failing service, allowing it time to recover. During this time, the circuit breaker can be configured to perform fallback actions or return cached data, ensuring that the application continues to function, albeit with potentially degraded performance.</p></div></div></section><section name="c976" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8a2b" id="8a2b" class="graf graf--h3 graf--leading">Transaction Outbox</h3><p name="ce4b" id="ce4b" class="graf graf--p graf-after--h3">The Transaction Outbox Cloud Design Pattern is a powerful technique for maintaining transactional consistency consistency in distributed systems. This pattern addresses this challenge by introducing an “outbox” within each service that contains messages describing data modifications. These messages are generated within the same transaction as the data changes (or any operation takes place), ensuring atomicity. They are then dispatched to a message broker, which, in turn, notifies subscribing services about the updates. This approach decouples services, allowing them to work independently, while guaranteeing that data changes are communicated reliably and consistently.</p><p name="b0de" id="b0de" class="graf graf--p graf-after--p graf--trailing">This approach is way better than a approach in which you make changes to database at one line and then sending notification on message queue. What if publishing to message queue fails but database operation succeeds and what if you publish to message queue first and then database transaction fails. To avoid such cases, transaction outbox pattern is required. It simplifies data synchronization and bolsters the reliability and integrity of distributed transactions in complex cloud environments.</p></div></div></section><section name="350a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8b1f" id="8b1f" class="graf graf--h3 graf--leading">CQRS</h3><figure name="3998" id="3998" class="graf graf--figure graf-after--h3"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*lEcF-DLS9410Fnvuy66Lcg.jpeg" data-width="600" data-height="337" src="../assets/blog/5-cloud-architecture-patterns-you-should-know/img-02.jpg"><figcaption class="imageCaption">Meme from <a href="https://makeameme.org" data-href="https://makeameme.org" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">https://makeameme.org</a></figcaption></figure><p name="ca89" id="ca89" class="graf graf--p graf-after--figure graf--trailing">The Command Query Responsibility Segregation (CQRS) Cloud Design Pattern is a transformative architectural paradigm suitable for demanding software systems. It introduces a clear division between two critical aspects of application functionality: commands and queries. The command side deals with write operations, where data is modified, while the query side handles read operations, facilitating data retrieval. This separation allows for specialized handling of each type of operation, optimizing performance and scalability for both commands and queries independently. CQRS further promotes the use of dedicated components, each finely tuned to its specific role, enabling fine-grained scalability and performance enhancements. This pattern enhances the maintainability and evolvability of complex cloud applications by allowing command and query system to scale at their own pace as per requirement. Whether managing high-throughput transactional systems or data-intensive analytical applications, CQRS serves as an indispensable tool for desiging cloud-based architectures.</p></div></div></section><section name="bf3d" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="04b6" id="04b6" class="graf graf--h3 graf--leading">External configuration</h3><p name="72f1" id="72f1" class="graf graf--p graf-after--h3">The External Configuration Cloud Design Pattern focuses on managing the frequent configurational changes in cloud based system without the hassle of re-deployments. It revolves around the practice of storing configuration details such as database connection strings, API keys, and feature toggles outside the application code. Instead, these configuration parameters are housed externally, often within a dedicated configuration store or service, and the application fetches them when necessary. This approach offers numerous advantages</p><ul class="postList"><li name="86e9" id="86e9" class="graf graf--li graf-after--p">Increase flexibility by enabling configuration adjustments without code alterations or re-deployments</li><li name="1a2d" id="1a2d" class="graf graf--li graf-after--li">Reinforces security by segregating sensitive information, and streamlines deployment procedures.</li><li name="08d5" id="08d5" class="graf graf--li graf-after--li">Allow for centralised control and management of configuration, making it easier to enforce consistency across multiple instances or services</li></ul><figure name="0441" id="0441" class="graf graf--figure graf-after--li"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*zqG-NB9ne35LH8Q1XZlP1A.jpeg" data-width="400" data-height="514" src="../assets/blog/5-cloud-architecture-patterns-you-should-know/img-03.jpg"><figcaption class="imageCaption">Meme from <a href="https://imgflip.com" data-href="https://imgflip.com" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">https://imgflip.com</a></figcaption></figure><p name="e520" id="e520" class="graf graf--p graf-after--figure graf--trailing">By adopting this pattern, an organisation can streamline the management of configuration data, enhance application resilience, and respond more effectively to evolving requirements in their cloud-based systems.</p></div></div></section><section name="bda6" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0332" id="0332" class="graf graf--h3 graf--leading">Conclusion</h3><p name="cf72" id="cf72" class="graf graf--p graf-after--h3">These patterns are more than just architectural strategies. They are the stories of human intelligence and desire to explore and conquer the digital universe.</p><blockquote name="2126" id="2126" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ These patterns are like brush strokes on the canvas of the cloud, creating a masterpiece of innovation and efficiency. With every stroke, you come close to designing that marvellous system. ”</blockquote><p name="2d15" id="2d15" class="graf graf--p graf-after--pullquote">With these patterns as our guides, we continue to push the boundaries of what’s possible in the software architecture and design, forging a path towards a future limited only by our imagination.</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/5-cloud-architecture-patterns-you-should-know-79526c9cfc0e" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="from-monolith-to-microservices-using-tactical-forking.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">From Monolith to Microservices Using Tactical Forking</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="software-engineering-is-an-art-not-a-profession.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Software Engineering Is An Art Not A Profession</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Node.js 25 brings Biggest Optimisation · Mohit Malhotra</title>
+  <meta name="description" content="The game changing 50% memory drop which Node 25 brings" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/node-js-25-brings-biggest-optimisation-ec374e9bc3d3" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Node.js 25 brings Biggest Optimisation" />
+  <meta property="og:description" content="The game changing 50% memory drop which Node 25 brings" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Node.js</span></div>
+      <h1 class="article__title">Node.js 25 brings Biggest Optimisation</h1>
+      <p class="article__subtitle">The game changing 50% memory drop which Node 25 brings</p>
+      <div class="article__meta">
+        <span>Mar 13, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="4073" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="d721" id="d721" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*MonEXqtPDV--yH5W_RIcKQ.jpeg" data-width="1536" data-height="1024" src="../assets/blog/node-js-25-brings-biggest-optimisation/img-01.jpg"></figure><p name="f2e4" id="f2e4" class="graf graf--p graf-after--figure">You deploy a simple Node.js microservice. It’s just a basic Fastify or Express API doing some JSON parsing and talking to Postgres. You check your metrics in Grafana, and your jaw drops.</p><p name="e28b" id="e28b" class="graf graf--p graf-after--p"><em class="markup--em markup--p-em">Why is this tiny service hoarding 400MB of RAM?</em></p><p name="bdd1" id="bdd1" class="graf graf--p graf-after--p">We usually blame our code. We hunt for memory leaks, swap out NPM packages, or aggressively call the garbage collector. But what if I told you the real memory hog isn’t your bad code?</p><p name="9177" id="9177" class="graf graf--p graf-after--p"><em class="markup--em markup--p-em">What if the hidden devil eating your server bill is the architecture of Node.js itself?</em></p><p name="184e" id="184e" class="graf graf--p graf-after--p">Well, the developers at Platformatic recently highlighted a massive shift in how Node handles memory. With Node 25, a feature called <strong class="markup--strong markup--p-strong">Pointer Compression</strong> is taking center stage, and it’s literally cutting Node.js memory usage in half.</p><p name="f030" id="f030" class="graf graf--p graf-after--p graf--trailing">Here is why your Node apps have been so fat all these years, and how this new update changes everything.</p></div></div></section><section name="f4d5" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="2232" id="2232" class="graf graf--h3 graf--leading">The 64-Bit Tax Nobody Told You About</h3><p name="0969" id="0969" class="graf graf--p graf-after--h3">To understand the fix, you have to understand the flaw.</p><p name="55d8" id="55d8" class="graf graf--p graf-after--p">Under the hood, Node.js runs on V8. Almost all modern servers run on a 64-bit architecture. In a 64-bit world, every time V8 needs to point to a memory location, it uses a 64-bit pointer.</p><p name="7497" id="7497" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">A 64-bit pointer takes up 8 bytes.</strong> Doesn’t sound like a big deal, right? But remember, JavaScript is a language built entirely on pointers.</p><ul class="postList"><li name="02b4" id="02b4" class="graf graf--li graf-after--p">Objects? Pointers to keys and values.</li><li name="c50f" id="c50f" class="graf graf--li graf-after--li">Arrays? A list of pointers.</li><li name="5ee6" id="5ee6" class="graf graf--li graf-after--li">Closures? Pointers to lexical scopes.</li></ul><p name="f0de" id="f0de" class="graf graf--p graf-after--li">When you load a massive JSON payload or keep thousands of concurrent connections open, your heap gets flooded. You aren’t just storing data; you are storing <em class="markup--em markup--p-em">millions</em> of 8-byte addresses pointing to that data. In heavily object-oriented Node apps, <strong class="markup--strong markup--p-strong">pointers alone can take up 60% of your total heap memory.</strong></p><p name="e886" id="e886" class="graf graf--p graf-after--p">You are paying AWS, GCP, or Azure real money just to store connective tissue.</p><figure name="5772" id="5772" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*sJUhNTHqrendNZ8UUjC5DQ.jpeg" data-width="2816" data-height="1536" src="../assets/blog/node-js-25-brings-biggest-optimisation/img-02.jpg"><figcaption class="imageCaption">64 bit memory address till Node 24</figcaption></figure></div></div></section><section name="efd2" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="2cc8" id="2cc8" class="graf graf--h3 graf--leading">The 50% Hack</h3><p name="c66b" id="c66b" class="graf graf--p graf-after--h3">This is where Node 25 (and modern V8) pulls off a brilliant trick.</p><p name="fef5" id="fef5" class="graf graf--p graf-after--p">A 64-bit pointer can address 18 exabytes of RAM. Let’s be real, your Kubernetes pod has a 512MB limit. You don’t need 18 exabytes of addressable space.</p><p name="141b" id="141b" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Pointer Compression</strong> is a technique where V8 says, “Let’s stop using massive 64-bit absolute addresses.”</p><p name="4e22" id="4e22" class="graf graf--p graf-after--p">Instead, V8 creates a memory cage<strong class="markup--strong markup--p-strong">, </strong>a contiguous chunk of memory. It sets a single base address for this cage. After that, every pointer inside your app is just stored as a 32-bit offset from that base.</p><blockquote name="7efe" id="7efe" class="graf graf--pullquote graf-after--p"><em class="markup--em markup--pullquote-em">Base Address + 32-bit Offset = Your Data.</em></blockquote><p name="1aa4" id="1aa4" class="graf graf--p graf-after--pullquote">By doing this, V8 shrinks every single pointer in your application from 8 bytes down to 4 bytes. <strong class="markup--strong markup--p-strong">Your pointers are literally get cut in half.</strong></p><figure name="b89a" id="b89a" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*K1-P7rn9JBhMLOmnDONM8w.jpeg" data-width="2816" data-height="1339" src="../assets/blog/node-js-25-brings-biggest-optimisation/img-03.jpg"><figcaption class="imageCaption">How pointer compression works</figcaption></figure></div></div></section><section name="0300" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8cc0" id="8cc0" class="graf graf--h3 graf--leading">The Catch</h3><p name="d0c1" id="d0c1" class="graf graf--p graf-after--h3">In software engineering, every massive win comes with a trade-off. Because V8 is now using 32-bit offsets, the maximum amount of memory it can address inside that “cage” is exactly <strong class="markup--strong markup--p-strong">4GB</strong>. If your Node application tries to allocate more than 4GB of heap memory, it will crash.</p><p name="71e7" id="71e7" class="graf graf--p graf-after--p">Is this a problem? For 99% of backend engineers, the answer is a resounding <strong class="markup--strong markup--p-strong">no</strong>.</p><p name="0529" id="0529" class="graf graf--p graf-after--p">If your single-threaded Node.js worker is chewing through more than 4GB of RAM, you don’t have a memory limit problem; you have a system design problem. You should probably be:</p><ol class="postList"><li name="de2c" id="de2c" class="graf graf--li graf-after--p">Streaming your data instead of loading it all into memory.</li><li name="af24" id="af24" class="graf graf--li graf-after--li">Pushing heavy state to a database like Redis or Postgres.</li><li name="375f" id="375f" class="graf graf--li graf-after--li">Scaling horizontally with more lightweight pods.</li></ol><p name="219b" id="219b" class="graf graf--p graf-after--li">For the vast majority of us building REST APIs, GraphQL servers, and microservices, we will never hit that 4GB ceiling. But we <em class="markup--em markup--p-em">will</em> instantly feel the 40–50% drop in baseline memory usage.</p><h4 name="125e" id="125e" class="graf graf--h4 graf-after--p">How to Check If You’re Getting the Discount</h4><p name="3a0c" id="3a0c" class="graf graf--p graf-after--h4">The best part about this is that it requires zero code changes on your end. It’s an infrastructure-level win. As cloud-native distributions of Node 25 roll out, this compressed pointer build is becoming the standard for environments that don’t need massive heaps.</p><p name="26c1" id="26c1" class="graf graf--p graf-after--p">Want to know if your current Node instance is running with Pointer Compression? You can write a tiny script to check your V8 heap limit.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="javascript" name="1499" id="1499" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">const</span> v8 = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;v8&#x27;</span>);<br /><br /><span class="hljs-keyword">function</span> <span class="hljs-title function_">checkPointerCompression</span>(<span class="hljs-params"></span>) {<br />  <span class="hljs-keyword">const</span> stats = v8.<span class="hljs-title function_">getHeapStatistics</span>();<br />  <br />  <span class="hljs-comment">// Convert bytes to Gigabytes</span><br />  <span class="hljs-keyword">const</span> heapLimitGB = stats.<span class="hljs-property">heap_size_limit</span> / (<span class="hljs-number">1024</span> * <span class="hljs-number">1024</span> * <span class="hljs-number">1024</span>);<br />  <br />  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Max Heap Limit: <span class="hljs-subst">${heapLimitGB.toFixed(<span class="hljs-number">2</span>)}</span> GB`</span>);<br />  <br />  <span class="hljs-keyword">if</span> (heapLimitGB &lt;= <span class="hljs-number">4.1</span>) {<br />    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;Pointer Compression is likely ENABLED! Enjoy the free RAM.&quot;</span>);<br />  } <span class="hljs-keyword">else</span> {<br />    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&quot;You are running standard 64-bit pointers.&quot;</span>);<br />  }<br />}<br /><br /><span class="hljs-title function_">checkPointerCompression</span>();</span></pre><p name="1f27" id="1f27" class="graf graf--p graf-after--pre graf--trailing">If it spits out something around <code class="markup--code markup--p-code">4.00 GB</code>, congratulations. You&#39;ve ditched the 64-bit bloat.</p></div></div></section><section name="4f73" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="cc0f" id="cc0f" class="graf graf--h3 graf--leading">Conclusion</h3><p name="7b34" id="7b34" class="graf graf--p graf-after--h3">We spend hours tweaking algorithms, arguing over ORMs, and implementing caching layers just to squeeze a little more performance out of our servers.</p><blockquote name="848f" id="848f" class="graf graf--pullquote graf-after--p">Sometimes, the biggest bottleneck is just the runtime carrying too much baggage. Pointer compression in Node 25 is a massive quality-of-life update for DevOps and backend engineers. It means higher pod density, fewer Out-Of-Memory (OOM) crashes, and ultimately, cheaper server bills.</blockquote><p name="1772" id="1772" class="graf graf--p graf-after--pullquote">Upgrade your runtimes, shrink your limits, and stop paying for 64-bit pointers you don’t need.</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/node-js-25-brings-biggest-optimisation-ec374e9bc3d3" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="the-hidden-power-of-adonis-js.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">The Hidden Power of Adonis.js</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="art-of-autoscaling-in-kubernetes.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Art of Autoscaling in Kubernetes</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

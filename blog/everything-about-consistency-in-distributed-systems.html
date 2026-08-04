@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Everything about consistency in distributed systems · Mohit Malhotra</title>
+  <meta name="description" content="Study of different levels of consistency in distributed systems" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/understanding-consistency-in-system-design-fd0bb6546dc8" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Everything about consistency in distributed systems" />
+  <meta property="og:description" content="Study of different levels of consistency in distributed systems" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span></div>
+      <h1 class="article__title">Everything about consistency in distributed systems</h1>
+      <p class="article__subtitle">Study of different levels of consistency in distributed systems</p>
+      <div class="article__meta">
+        <span>May 2, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="bf30" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="4e8f" id="4e8f" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*2G7bE8aUYdZ6aZua" data-width="6052" data-height="4035" src="../assets/blog/everything-about-consistency-in-distributed-systems/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@nampoh?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@nampoh?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Maxim Hopman</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="1e98" id="1e98" class="graf graf--p graf-after--figure graf--trailing">While designing an enterprise level software system, we hear a lot about managing consistency, scalability or performance of that system architecture. In large scale software system like Facebook, Amazon or Netflix, millions of users are hitting servers per second and the load is so high that you cannot manage it with a single large computer . Hence multiple servers are running the same copy of the software which are exposed by a proxy server. Now we need the data on these servers to be consistent. Let’s talk about the elephant in the room ‘<em class="markup--em markup--p-em">Consistency</em>’.</p></div></div></section><section name="2cdf" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3fd7" id="3fd7" class="graf graf--h3 graf--leading">What do you mean by Consistency</h3><p name="2ce6" id="2ce6" class="graf graf--p graf-after--h3">Consistency means if there is change made in the state (or data) of the system, it will be show the consistent output everywhere and everytime. Now in simple words, if you press the like button on your friends photo on facebook with 99 likes and it becomes 100. If you and your friend are in different continents, both should see 100 likes even after refreshing multiple times.</p><p name="aaaa" id="aaaa" class="graf graf--p graf-after--p graf--trailing">Is it so important to have such high consistency on Facebook’s like feature. No! but for banking systems its essential. So lets discuss how you can configure consistency of your software system as per you business needs.</p></div></div></section><section name="f5b1" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="e4f1" id="e4f1" class="graf graf--h3 graf--leading">Levels of consistency</h3><p name="a7bc" id="a7bc" class="graf graf--p graf-after--h3">Generally, consistency in distributed systems are classified into 4 categories namely</p><ol class="postList"><li name="c512" id="c512" class="graf graf--li graf-after--p">Strict or Linearised consistency</li><li name="e47f" id="e47f" class="graf graf--li graf-after--li">Causal consistency (<em class="markup--em markup--li-em">it cause-al not casual</em>)</li><li name="1705" id="1705" class="graf graf--li graf-after--li">Eventual consistency</li><li name="f1f2" id="f1f2" class="graf graf--li graf-after--li">Quorom</li></ol><figure name="873e" id="873e" class="graf graf--figure graf-after--li"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*oeRHdLKFVNpKqdX04S4GdQ.png" data-width="1226" data-height="963" src="../assets/blog/everything-about-consistency-in-distributed-systems/img-02.png"><figcaption class="imageCaption">Comparison between different consistency levels</figcaption></figure><h4 name="2381" id="2381" class="graf graf--h4 graf-after--figure">Strict or Linearised consistency</h4><p name="c918" id="c918" class="graf graf--p graf-after--h4">When the system needs to highly consistent to its limits, then linearised consistency approach can be used. In this, the request are handled by the system one at a time linearly. Assume it like a single threaded ordered operation which ensures outcome of every processed request is consistent before handling the next request.</p><p name="9e43" id="9e43" class="graf graf--p graf-after--p">You must have guessed it right, it’s low performant. Moreover, there is a head of blocking issue which means if a long running request is stuck in the system, the next request needs to wait. Though you can put a <strong class="markup--strong markup--p-strong">time-to-live</strong> limit on the request to manage this issue but it degrades the performance. High consistency is a tradeoff for performance here.</p><h4 name="486e" id="486e" class="graf graf--h4 graf-after--p">Causal consistency</h4><p name="8882" id="8882" class="graf graf--p graf-after--h4">If you are a smart ass guy, you must have thought why we need to linearise the whole system when we can handle only the relevant request sequentially and others can run in parallel.</p><p name="ccf5" id="ccf5" class="graf graf--p graf-after--p">Well ! Causal consistency is that approach in which system handler the requests (or operations) in a sequential and ordered manner only if they are related whereas other requests can be handled in parallel.</p><p name="e5a6" id="e5a6" class="graf graf--p graf-after--p">Causal consistency approach definitely offers high performance, availability as compared to linearised consistency approach but is somewhat less consistent. (Why ? Well how will you perfectly determine if two requests are related in the same context or not. Well think about it)</p><h4 name="000d" id="000d" class="graf graf--h4 graf-after--p">Eventual consistency</h4><p name="ad19" id="ad19" class="graf graf--p graf-after--h4">When immediate consistency is not the priority for you, rather you need high availability for a system like social media platform or Tinder etc. Go for eventually consistently in which system ensures consistency not immediately but at a certain point of time in the near future (eventually).</p><p name="14f3" id="14f3" class="graf graf--p graf-after--p">This approach can help alot in handle enormous load as you can use techniques like write back caching or message queues in order delegate an operation if that doesn’t require immediate attention.</p><p name="c942" id="c942" class="graf graf--p graf-after--p">Yes! It’s offers less degree of consistency than prior approaches but trade off offers high availability and performance with ability to handle requests concurrently.</p><h4 name="70f3" id="70f3" class="graf graf--h4 graf-after--p">Quorum</h4><p name="142a" id="142a" class="graf graf--p graf-after--h4">Consistency is an expensive affair so you need to think twice to what extent you need your system to be consistent and what’s better than having the power to configure the degree of consistency.</p><figure name="3dea" id="3dea" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*terpuxWa7VtCoQ8HMaVTmA.jpeg" data-width="600" data-height="389" src="../assets/blog/everything-about-consistency-in-distributed-systems/img-03.jpg"><figcaption class="imageCaption">Meme by makememe.org</figcaption></figure><p name="5a6b" id="5a6b" class="graf graf--p graf-after--figure">Quorum is<strong class="markup--strong markup--p-strong"> </strong>pretty common technique in the distributed systems that helps in having configurable consistency by using co ordination between the multiple servers (or nodes). Rather than giving a definition, let’s take an example.</p><p name="d075" id="d075" class="graf graf--p graf-after--p">Assume there is a cluster of 3 nodes (to avoid split brain problem, comment if you want an article on that too). Whenever there is a change in state in node A, it should be propagated to node B and C as well. Its not necessary that all the nodes will stay consistent at a given point of time, infact mostly inconsistent. If node A and B has a state change with X=10 and node c has state change with X=12, actual value X can deduced with consistency using Quorum approach in the following ways</p><ol class="postList"><li name="c208" id="c208" class="graf graf--li graf-after--p">Strictly consistency : <strong class="markup--strong markup--li-strong">R + W &gt; N</strong></li><li name="e662" id="e662" class="graf graf--li graf-after--li">Eventual consistency : <strong class="markup--strong markup--li-strong">R + W ≤ N</strong></li></ol><p name="18ce" id="18ce" class="graf graf--p graf-after--li">Here <strong class="markup--strong markup--p-strong">R </strong>= number of nodes to be read, <strong class="markup--strong markup--p-strong">W </strong>= number of nodes to write, <strong class="markup--strong markup--p-strong">N</strong> = total number of nodes</p><p name="1405" id="1405" class="graf graf--p graf-after--p graf--trailing">So while performing a write operation, you should write to at least <strong class="markup--strong markup--p-strong">W</strong> nodes and incase of read operation, read from at least <strong class="markup--strong markup--p-strong">R</strong> nodes.</p></div></div></section><section name="abf6" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="a682" id="a682" class="graf graf--h3 graf--leading">Conclusion</h3><p name="ef8e" id="ef8e" class="graf graf--p graf-after--h3">Consistency is not the only governing factoring in a good system design, one needs to consider other factors like scalability, availability and fault tolerance etc. Everything should be considering in the picturing before designing a system.</p><blockquote name="2e94" id="2e94" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Low degree of consistency is not a bad thing to have as you get effeciency or availability in tradeoff mostly. Level of consistency should be decided depending on the business needs or intent of the system. “</blockquote><p name="aacf" id="aacf" class="graf graf--p graf-after--pullquote"><strong class="markup--strong markup--p-strong">Don’t forget to give a clap if you like this article and follow me on medium for more.</strong></p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/understanding-consistency-in-system-design-fd0bb6546dc8" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="biggest-mistake-an-experienced-software-engineer-can-do.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Biggest mistake an experienced software engineer can do</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="understanding-the-lambda-architecture.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Understanding the LAMBDA architecture</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

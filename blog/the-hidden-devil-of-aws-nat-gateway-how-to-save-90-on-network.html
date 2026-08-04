@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Hidden Devil of AWS NAT Gateway : How to Save 90% on Network Costs · Mohit Malhotra</title>
+  <meta name="description" content="Avoid the $500/Month mistake you are probably making using AWS NAT Gateways" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network-costs-4b55ff3e08bb" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The Hidden Devil of AWS NAT Gateway : How to Save 90% on Network Costs" />
+  <meta property="og:description" content="Avoid the $500/Month mistake you are probably making using AWS NAT Gateways" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Cloud</span><span class="tag">Craft</span></div>
+      <h1 class="article__title">The Hidden Devil of AWS NAT Gateway : How to Save 90% on Network Costs</h1>
+      <p class="article__subtitle">Avoid the $500/Month mistake you are probably making using AWS NAT Gateways</p>
+      <div class="article__meta">
+        <span>Feb 3, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="76ec" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="806a" id="806a" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*zfMH25ts7PQCq7n0HWCQNQ.png" data-width="2848" data-height="1504" src="../assets/blog/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network/img-01.png"></figure><p name="9488" id="9488" class="graf graf--p graf-after--figure">We all love the convenience of the Cloud. Click a button, and you have a database. Check a box, and your private subnets have internet access. But this convenience comes with a “Hidden Devil” that is silently eating your startup’s runway.</p><p name="117b" id="117b" class="graf graf--p graf-after--p">If you are running a VPC on AWS, you are likely using a <strong class="markup--strong markup--p-strong">Managed NAT Gateway</strong>. It’s the default recommendation, it’s highly available, and it requires zero maintenance.</p><p name="ca51" id="ca51" class="graf graf--p graf-after--p">It is also one of the most overpriced components in the entire AWS ecosystem.</p><p name="3d16" id="3d16" class="graf graf--p graf-after--p">I recently audited a client’s infrastructure where the NAT Gateway was costing <strong class="markup--strong markup--p-strong">more than their actual application servers</strong>. In this article, I will expose the hidden math of Managed NAT Gateways and show you how to replace them with a robust, cost-effective NAT Instance solution.</p><figure name="fd9c" id="fd9c" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*DuJamI6IAWe9mLlNQV0Yiw.jpeg" data-width="2816" data-height="1536" src="../assets/blog/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network/img-02.jpg"><figcaption class="imageCaption">Cost comparison of Managed NAT vs NAT instance</figcaption></figure><h3 name="fbc8" id="fbc8" class="graf graf--h3 graf-after--figure">The Hidden Math</h3><p name="e3d2" id="e3d2" class="graf graf--p graf-after--h3">AWS charges you for NAT Gateways in two dimensions, and this is where they get you:</p><ol class="postList"><li name="c73d" id="c73d" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Hourly Charge:</strong> ~$0.045 per hour per Availability Zone (AZ).</li><li name="020f" id="020f" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Data Processing Charge:</strong> ~$0.045 per GB of data processed.</li></ol><p name="c7b8" id="c7b8" class="graf graf--p graf-after--li">At first glance, this looks negligible. But let’s do the math for a moderate-traffic application handling 10 TB of monthly outbound traffic (images, external API calls, Docker image pulls, etc.) across 3 AZs.</p><ul class="postList"><li name="efae" id="efae" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Hourly Cost:</strong> $0.045 * 24 * 30 * 3 ≈ <strong class="markup--strong markup--li-strong">$97/month</strong></li><li name="40c1" id="40c1" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Processing Cost:</strong> $0.045 * 10,000 GB = <strong class="markup--strong markup--li-strong">$450/month</strong></li><li name="aa8a" id="aa8a" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Total: $547/month</strong></li></ul><p name="d269" id="d269" class="graf graf--p graf-after--li graf--trailing">You are paying over <strong class="markup--strong markup--p-strong">$6,500 a year</strong> just to route traffic. And remember, this doesn’t even include the standard Data Transfer Out rates (internet egress)! You are paying a “processing tax” on every byte that flows through that gateway.</p></div></div></section><section name="8810" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3a62" id="3a62" class="graf graf--h3 graf--leading">The Alternative: The Humble NAT Instance</h3><p name="81e3" id="81e3" class="graf graf--p graf-after--h3">Before AWS released Managed NAT Gateways, we used <strong class="markup--strong markup--p-strong">NAT Instances</strong>. These are standard EC2 instances configured to route traffic.</p><p name="7b85" id="7b85" class="graf graf--p graf-after--p">Why should you go back to them in 2026?</p><ol class="postList"><li name="115e" id="115e" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Cheaper Compute:</strong> A <code class="markup--code markup--li-code">t4g.nano</code> (ARM-based) instance costs ~$0.0042/hour.</li><li name="2e73" id="2e73" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Zero Processing Fees:</strong> You <strong class="markup--strong markup--li-strong">do not</strong> pay the $0.045/GB processing fee. You only pay for the instance and standard bandwidth.</li><li name="b403" id="b403" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Full Control:</strong> You can run traffic shaping, filtering, or monitoring (like <code class="markup--code markup--li-code">tcpdump</code>) right on the instance.</li></ol><p name="2870" id="2870" class="graf graf--p graf-after--li">Let’s recalculate the cost for the same 10 TB scenario using <code class="markup--code markup--p-code">t4g.micro</code> instances (for better network baseline) in 3 AZs:</p><ul class="postList"><li name="1f29" id="1f29" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Hourly Cost:</strong> ~$0.0084 * 24 * 30 * 3 ≈ <strong class="markup--strong markup--li-strong">$18/month</strong></li><li name="4d84" id="4d84" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Processing Cost:</strong> <strong class="markup--strong markup--li-strong">$0</strong></li><li name="fb3d" id="fb3d" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Total:</strong> <strong class="markup--strong markup--li-strong">$18/month</strong></li></ul><p name="9bed" id="9bed" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">Savings: ~$529 per month (96% reduction).</strong> That is budget you could be spending on your AI experiments or hiring.</p><figure name="2cb9" id="2cb9" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*P6WqjvaGWwr8fNrKa-6oWw.jpeg" data-width="2816" data-height="1536" src="../assets/blog/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network/img-03.jpg"><figcaption class="imageCaption">Flow of traffic</figcaption></figure></div></div></section><section name="be1a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3671" id="3671" class="graf graf--h3 graf--startsWithDoubleQuote graf--leading">“But What About S3?” (The Rookie Mistake)</h3><p name="7aed" id="7aed" class="graf graf--p graf-after--h3">Before you rip out your NAT Gateway, just go and check one thing - ‘<strong class="markup--strong markup--p-strong">Are you even paying for S3 traffic?’</strong></p><p name="080c" id="080c" class="graf graf--p graf-after--p">Many developers don’t realize that if your private instances talk to S3 (or DynamoDB) via a NAT Gateway, you pay the processing fee on that data.</p><ul class="postList"><li name="73f7" id="73f7" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">The Fix:</strong> Use a <strong class="markup--strong markup--li-strong">VPC Gateway Endpoint</strong>.</li><li name="0aa8" id="0aa8" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Cost:</strong> Free.</li><li name="cf1c" id="cf1c" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Result:</strong> Traffic to S3 bypasses the NAT entirely.</li></ul><p name="0246" id="0246" class="graf graf--p graf-after--li graf--trailing">Even if you keep your NAT Gateway, adding a VPC Endpoint is often the easiest “quick win” optimization you can do today.</p></div></div></section><section name="c3e9" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="91ed" id="91ed" class="graf graf--h3 graf--leading">The “High Availability” Myth</h3><p name="8196" id="8196" class="graf graf--p graf-after--h3">The main argument against NAT Instances is that they are a Single Point of Failure (SPOF). If the instance dies, your private subnet loses internet access.</p><p name="0957" id="0957" class="graf graf--p graf-after--p">But we are engineers. We can solve this.</p><p name="9391" id="9391" class="graf graf--p graf-after--p graf--trailing">You don’t need a complex HA setup for most use cases. A simple <strong class="markup--strong markup--p-strong">Auto Scaling Group (ASG)</strong> with a minimum and maximum size of 1 is often enough. If the instance crashes, the ASG spins up a new one in less than a minute. For non-critical background jobs, this short downtime is acceptable.</p></div></div></section><section name="e201" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="dcf6" id="dcf6" class="graf graf--h3 graf--leading">Implementation Guide</h3><p name="b4f0" id="b4f0" class="graf graf--p graf-after--h3">Here is how you can set up a robust NAT Instance in 5 minutes.</p><p name="31c6" id="31c6" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">1. The Setup</strong></p><p name="0378" id="0378" class="graf graf--p graf-after--p">Launch an EC2 instance (Amazon Linux 2023) in your <strong class="markup--strong markup--p-strong">Public Subnet</strong>.</p><ul class="postList"><li name="2ee7" id="2ee7" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Instance Type:</strong> <code class="markup--code markup--li-code">t4g.nano</code> or <code class="markup--code markup--li-code">t4g.micro</code>.</li><li name="7d96" id="7d96" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Source/Dest Check:</strong> <strong class="markup--strong markup--li-strong">Disabled</strong> (Critical step! Go to EC2 &gt; Networking &gt; Change Source/Dest. Check).</li><li name="35e3" id="35e3" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Security Group:</strong> Allow Inbound <code class="markup--code markup--li-code">All Traffic</code> from your VPC CIDR.</li></ul><p name="92f8" id="92f8" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">2. The Configuration Script</strong></p><p name="72c9" id="72c9" class="graf graf--p graf-after--p">Use the following <code class="markup--code markup--p-code">User Data</code> script to configure <code class="markup--code markup--p-code">iptables</code> automatically on boot. This ensures that even if the instance is replaced by the ASG, the new one configures itself immediately.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="bash" name="cd82" id="cd82" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-meta">#!/bin/bash</span><br /><span class="hljs-comment"># Enable IP Forwarding</span><br /><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;net.ipv4.ip_forward = 1&quot;</span> &gt;&gt; /etc/sysctl.d/custom-ip-forwarding.conf<br />sysctl -p /etc/sysctl.d/custom-ip-forwarding.conf<br /><br /><span class="hljs-comment"># Install iptables services</span><br />yum install -y iptables-services<br /><br /><span class="hljs-comment"># Configure Masquerading (NAT)</span><br /><span class="hljs-comment"># Note: &#x27;ens5&#x27; is the default interface for Nitro instances (like t4g)</span><br />iptables -t nat -A POSTROUTING -o ens5 -j MASQUERADE<br />service iptables save<br />systemctl <span class="hljs-built_in">enable</span> iptables<br />systemctl start iptables</span></pre><p name="2de4" id="2de4" class="graf graf--p graf-after--pre"><strong class="markup--strong markup--p-strong">3. Update Route Tables</strong></p><p name="82ff" id="82ff" class="graf graf--p graf-after--p">Go to your <strong class="markup--strong markup--p-strong">Private Subnet</strong> route tables and point the <code class="markup--code markup--p-code">0.0.0.0/0</code> route to your new NAT Instance ID (specifically the Network Interface) instead of the NAT Gateway ID.</p><figure name="79b5" id="79b5" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*4P3reOtYUzfLbvuYpNRWow.jpeg" data-width="2816" data-height="1536" src="../assets/blog/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network/img-04.jpg"><figcaption class="imageCaption">AWS VPC routing table entry</figcaption></figure></div></div></section><section name="b15f" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="53d0" id="53d0" class="graf graf--h3 graf--leading">When Should You Keep the Managed Gateway?</h3><p name="c66b" id="c66b" class="graf graf--p graf-after--h3">I am not saying Managed NAT Gateways are useless. They are excellent if:</p><ol class="postList"><li name="309b" id="309b" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Compliance:</strong> You have strict requirements that forbid self-managed network appliances.</li><li name="615d" id="615d" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Five 9s:</strong> You require 99.999% availability with zero downtime for outgoing connections.</li><li name="e163" id="e163" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Team Size:</strong> Your team is too small to manage <em class="markup--em markup--li-em">any</em> EC2 instances.</li></ol><p name="b00d" id="b00d" class="graf graf--p graf-after--li graf--trailing">But for 90% of startups and mid-sized companies, the premium you pay for “managed” is simply not worth it.</p></div></div></section><section name="a285" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="1aed" id="1aed" class="graf graf--h3 graf--leading">Conclusion</h3><blockquote name="7509" id="7509" class="graf graf--pullquote graf-after--h3">Cloud cost optimization isn’t just about reserving instances or spotting unused resources. It’s about questioning the defaults. AWS defaults often prioritize their revenue and your convenience over your budget.</blockquote><p name="09d5" id="09d5" class="graf graf--p graf-after--pullquote">By spending 30 minutes setting up a NAT Instance strategy, you can save thousands of dollars annually. Stop burning money on “Processing Fees.” Take control of your network.</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network-costs-4b55ff3e08bb" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="build-production-ready-agents-with-mcp.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Build Production Ready Agents With MCP</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="develop-high-performance-microservices-with-c.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Develop High Performance Microservices with C++</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

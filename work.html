@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work · Mohit Malhotra</title>
+  <meta name="description" content="How Mohit Malhotra thinks about systems: an interactive exploded view of a microservice stack, plus open source contributions to Node.js, the Azure IoT C SDK and MySQL Connector/Node.js." />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Work · Mohit Malhotra" />
+  <meta property="og:description" content="An interactive exploded view of a microservice stack, plus open source contributions." />
+  <meta property="og:url" content="https://mohit51196.github.io/work.html" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="index.html" data-hover>About</a>
+      <a href="journey.html" data-hover>Journey</a>
+      <a href="work.html" class="is-active" data-hover>Work</a>
+      <a href="blog/index.html" data-hover>Blog</a>
+      <a href="contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="index.html">About</a>
+      <a href="journey.html">Journey</a>
+      <a href="work.html">Work</a>
+      <a href="blog/index.html">Blog</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main>
+
+    <header class="page-hero">
+      <div class="section__head" data-reveal>
+        <span class="section__index">//</span>
+        <span class="section__label">Work</span>
+      </div>
+      <h1 class="page-hero__title" data-reveal>Products shipped, systems <em>explained</em></h1>
+      <p class="page-hero__sub" data-reveal>The products I helped build, from operating rooms to enterprise
+        clouds, working globally as an engineer solving problems at scale, plus how I think about systems,
+        and the open source I contribute to along the way.</p>
+    </header>
+
+    <!-- ============ PRODUCTS ============ -->
+    <section class="section products-section" id="products">
+      <div class="section__head" data-reveal>
+        <span class="section__index">01</span>
+        <span class="section__label">Products</span>
+      </div>
+      <h2 class="section__title" data-reveal>Built for the <em>real world</em></h2>
+      <div class="products" id="productsGrid"></div>
+    </section>
+
+    <!-- ============ SYSTEM ANATOMY (exploded 3D view) ============ -->
+    <section class="section anatomy" id="anatomy">
+      <div class="section__head" data-reveal>
+        <span class="section__index">02</span>
+        <span class="section__label">System Anatomy</span>
+      </div>
+
+      <div class="anatomy__wrap" id="anatomyWrap">
+        <div class="anatomy__grid">
+          <div class="anatomy__side">
+            <p class="anatomy__hint" id="anatomyHint">Scroll to pull the stack apart. Drag to rotate.</p>
+            <ul class="anatomy__legend" id="anatomyLegend"></ul>
+          </div>
+          <div class="anatomy__stage" id="anatomyStage">
+            <canvas id="anatomyCanvas" aria-label="Exploded 3D view of a microservice architecture stack" role="img"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OPEN SOURCE CONTRIBUTIONS ============ -->
+    <section class="section oss" id="opensource">
+      <div class="section__head" data-reveal>
+        <span class="section__index">03</span>
+        <span class="section__label">Open Source</span>
+      </div>
+      <h2 class="section__title" data-reveal>Open source <em>contributions</em></h2>
+      <div class="oss__grid" id="ossGrid"></div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta-band">
+      <h2 class="cta-band__title" data-reveal>Want this kind of <em>thinking</em> on your team?</h2>
+      <p class="cta-band__sub" data-reveal>Available for senior engineering roles and backend architecture consulting.</p>
+      <a href="contact.html" class="btn btn--solid" data-magnetic data-hover>Get in touch</a>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed & built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <!-- Libraries (pinned, deferred) — needed for the exploded view -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.147.0/three.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script defer src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js"></script>
+
+  <script defer src="js/content.js"></script>
+  <script defer src="js/blog-data.js"></script>
+  <script defer src="js/anatomy.js"></script>
+  <script defer src="js/main.js"></script>
+  <script defer src="js/terminal.js"></script>
+</body>
+</html>

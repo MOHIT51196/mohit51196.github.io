@@ -1,0 +1,226 @@
+/* ============================================================
+   Terminal mode — full-screen overlay
+   Deliberately ink-dark against the light site: a real tool.
+   ============================================================ */
+
+/* The hidden attribute must always win over display: flex — without
+   this, the closed terminal is an invisible full-screen click shield
+   that blocks every interaction on the page. */
+.term[hidden] { display: none !important; }
+
+.term {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+  display: flex;
+  flex-direction: column;
+  background: #14130d;
+  color: #ece7da;
+  font-family: 'JetBrains Mono', 'SFMono-Regular', Menlo, monospace;
+  font-size: 13.5px;
+  line-height: 1.75;
+  opacity: 0;
+  transform: scale(0.985);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.term.is-open {
+  opacity: 1;
+  transform: none;
+}
+
+.term ::selection { background: #4b5ae0; color: #fff; }
+
+/* Native cursor behaves normally inside the terminal */
+html.js .term, html.js .term * { cursor: auto; }
+html.js .term a, html.js .term button { cursor: pointer; }
+
+/* ---------- chrome bar ---------- */
+
+.term__chrome {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.1rem;
+  height: 44px;
+  background: #1b1a12;
+  border-bottom: 1px solid rgba(236, 231, 218, 0.08);
+  flex-shrink: 0;
+}
+
+.term__dots { display: flex; gap: 7px; }
+
+.term__dots i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.term__dots i:nth-child(1) { background: #ff5f57; }
+.term__dots i:nth-child(2) { background: #febc2e; }
+.term__dots i:nth-child(3) { background: #28c840; }
+
+.term__title {
+  flex: 1;
+  text-align: center;
+  font-size: 12px;
+  color: #8b8574;
+  letter-spacing: 0.06em;
+}
+
+.term__close {
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b8574;
+  border: 1px solid rgba(236, 231, 218, 0.15);
+  border-radius: 6px;
+  padding: 0.3rem 0.7rem;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.term__close:hover { color: #ece7da; border-color: #ece7da; }
+
+/* ---------- screen ---------- */
+
+.term__screen {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.4rem 1.6rem 0.8rem;
+  overscroll-behavior: contain;
+}
+
+.term__screen::-webkit-scrollbar { width: 8px; }
+.term__screen::-webkit-scrollbar-track { background: transparent; }
+.term__screen::-webkit-scrollbar-thumb { background: #33301f; border-radius: 4px; }
+
+.term__row {
+  white-space: pre-wrap;
+  word-break: break-word;
+  min-height: 1.2em;
+}
+
+/* ---------- output colors ---------- */
+
+.t-dim { color: #8b8574; }
+.t-accent { color: #93a1ff; }
+.t-head { color: #fff; font-weight: 500; }
+.t-ok { color: #7fce8f; }
+.t-err { color: #ff7a70; }
+.t-quote { color: #d9d2bd; font-style: italic; }
+.t-code { color: #c8d3f5; background: rgba(147, 161, 255, 0.08); display: inline-block; padding: 0.1em 0.5em; border-radius: 4px; }
+.t-more { color: #14130d; background: #93a1ff; padding: 0 0.5em; border-radius: 3px; }
+.t-art { letter-spacing: 0; }
+
+.t-link {
+  color: #93a1ff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.t-link:hover { color: #c8d3f5; }
+
+/* ---------- input bar ---------- */
+
+.term__inputbar {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  padding: 0.35rem 1.6rem 0.9rem;
+  flex-shrink: 0;
+}
+
+.term__prompt {
+  color: #93a1ff;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.term__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.term__input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: #ece7da;
+  font: inherit;
+  letter-spacing: inherit;
+  caret-color: transparent;
+  padding: 0;
+}
+
+.term__mirror {
+  position: absolute;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.term__ghost {
+  position: absolute;
+  top: 0;
+  color: #57523f;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.term__caret {
+  position: absolute;
+  top: 0.18em;
+  width: 0.62em;
+  height: 1.25em;
+  background: #93a1ff;
+  opacity: 0.85;
+  pointer-events: none;
+  animation: termBlink 1.1s steps(2, start) infinite;
+}
+
+.term__input:not(:focus) ~ .term__caret { opacity: 0.3; animation: none; }
+
+@keyframes termBlink {
+  50% { opacity: 0; }
+}
+
+/* ---------- hint bar ---------- */
+
+.term__hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+  padding: 0.55rem 1.6rem;
+  border-top: 1px solid rgba(236, 231, 218, 0.08);
+  background: #171610;
+  color: #6f6a58;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.term__hints b {
+  color: #a59e88;
+  font-weight: 500;
+}
+
+/* ---------- responsive + reduced motion ---------- */
+
+@media (max-width: 640px) {
+  .term { font-size: 12px; }
+  .term__screen { padding: 1rem 0.9rem 0.6rem; }
+  .term__inputbar { padding: 0.3rem 0.9rem 0.7rem; }
+  .term__hints { padding: 0.5rem 0.9rem; gap: 0.3rem 1rem; }
+  .term__hints span:nth-child(2) { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .term { transition: none; transform: none; }
+  .term__caret { animation: none; }
+}

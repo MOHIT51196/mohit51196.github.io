@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Common mistakes in developing a tech product · Mohit Malhotra</title>
+  <meta name="description" content="Things to remember while developing a new software product" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/common-mistakes-in-developing-a-software-product-6f0aa8b18a25" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="5 Common mistakes in developing a tech product" />
+  <meta property="og:description" content="Things to remember while developing a new software product" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Craft</span></div>
+      <h1 class="article__title">5 Common mistakes in developing a tech product</h1>
+      <p class="article__subtitle">Things to remember while developing a new software product</p>
+      <div class="article__meta">
+        <span>Jan 26, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="a402" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="b047" id="b047" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*SdvpoUY5zJj2-LWLbS67gA.jpeg" data-width="5418" data-height="3612" src="../assets/blog/5-common-mistakes-in-developing-a-tech-product/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@charlesdeluvio?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@charlesdeluvio?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">charlesdeluvio</a> on <a href="https://unsplash.com/@charlesdeluvio?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" data-href="https://unsplash.com/@charlesdeluvio?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">Unsplash</a></figcaption></figure><p name="5623" id="5623" class="graf graf--p graf-after--figure">Startups and small companies often fantasize about the idea of launching a full-blown product like Youtube, Netflix at once. With years of experience in these fields, I can assure you that <strong class="markup--strong markup--p-strong">you can never launch a great software product on the first day</strong>. It takes multiple iterations to reach that level of satisfaction.</p><p name="2973" id="2973" class="graf graf--p graf-after--p graf--trailing">Like this, there are multiple mistakes that a team do while developing a new software product (especially in Startups). Following are the points to remember in order to avoid those mistakes.</p></div></div></section><section name="5318" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="a121" id="a121" class="graf graf--h3 graf--leading">Build less</h3><p name="e111" id="e111" class="graf graf--p graf-after--h3">Don’t race to include every feature in your product that comes in your mind. Some founders often come up with new feature ideas every other day and tell the developers to implement it which is the most common mistake.</p><p name="3a7f" id="3a7f" class="graf graf--p graf-after--p">Too many features can damage the quality of your product. Due to this user interface will get cluttered and the user experience will be complicated.</p><p name="cd96" id="cd96" class="graf graf--p graf-after--p">Users should flow through the interface of good software. A classic example is Instagram and WhatsApp. Build fewer features in your product. In fact, in your first launch, include only those features which are absolutely necessary for the user.</p><h3 name="b3e5" id="b3e5" class="graf graf--h3 graf-after--p"><strong class="markup--strong markup--h3-strong">Reduce the Cost to Change</strong></h3><p name="30dd" id="30dd" class="graf graf--p graf-after--h3">A software company can take leverage over its competitors by reducing its Cost to Change. Cost to Change is the cost that a software team bears in terms of effort, time, and money in order to implement regular modifications in the product.</p><p name="e2d1" id="e2d1" class="graf graf--p graf-after--p">Apart from keeping your code clean with periodic refactoring, the Cost to Change can be reduced in the following ways</p><ol class="postList"><li name="0fc7" id="0fc7" class="graf graf--li graf-after--p">Don’t over-hire. Keep your team size small</li><li name="2d50" id="2d50" class="graf graf--li graf-after--li">Avoid the addition of unnecessary features. More the features to deal with, the more the cost to change</li><li name="a439" id="a439" class="graf graf--li graf-after--li">Avoid frequent changes in the team structure</li><li name="2cb9" id="2cb9" class="graf graf--li graf-after--li">Implement coding standards &amp; guidelines so everyone stays on the same page</li></ol><h3 name="e464" id="e464" class="graf graf--h3 graf-after--li">Break down into smaller tasks</h3><p name="9812" id="9812" class="graf graf--p graf-after--h3">Generally, if you give 2 weeks to a programmer for building a feature, he/she will spend 10 days to develop 20% of the work and complete the rest in the last 4 days. Deadlines are met at the end of the day but with variable work performance.</p><figure name="d7bb" id="d7bb" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*a8ter_zn1Wd2d7qOBQ5b5w.jpeg" data-width="375" data-height="281" src="../assets/blog/5-common-mistakes-in-developing-a-tech-product/img-02.jpg"><figcaption class="imageCaption">Photo by <a href="https://www.memecreator.com" data-href="https://www.memecreator.com" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">memecreator.com</a></figcaption></figure><blockquote name="efdf" id="efdf" class="graf graf--blockquote graf-after--figure">Parkinson’s Law states that ‘work expands so as to fill the time available for its completion’.</blockquote><p name="f3b9" id="f3b9" class="graf graf--p graf-after--blockquote">In order to avoid such drastic variations in work performance (also known as work velocity), disintegrate your tasks into smaller tasks of not more than 1-2 days. It has two major benefits :</p><ol class="postList"><li name="1c48" id="1c48" class="graf graf--li graf-after--p">After completion of every small task, a team member gets a certain sense of achievement which was lacking in long-running tasks</li><li name="baa7" id="baa7" class="graf graf--li graf-after--li">The team’s velocity or work performance will get more uniform and can be tracked in a more detailed manner</li></ol><h3 name="817d" id="817d" class="graf graf--h3 graf-after--li">Develop inside out</h3><p name="f486" id="f486" class="graf graf--p graf-after--h3">Always develop the core of your product first. For example, if you are building a product like WhatsApp, forget about groups, payments, wallpapers, and other settings, just develop the chatting module first. Go from macro to micro details. Don’t look for a better font, more backup servers, or extra padding from the first day.</p><p name="22e6" id="22e6" class="graf graf--p graf-after--p">Prioritize which features are going to be the core features of your product and develop them to a stable point. Then build the surrounding features and setting preferences.</p><h3 name="009c" id="009c" class="graf graf--h3 graf-after--p">Manage programmatic debt</h3><p name="c19f" id="c19f" class="graf graf--p graf-after--h3">Due to tight deadlines, developers often end up with low-quality high coupled yet functional code. This practice results in extra refactoring work in the future which is termed <em class="markup--em markup--p-em">programmatic debt</em> here.</p><figure name="e267" id="e267" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*oI7tkbjVDWCjMaoqyw3zTg.png" data-width="702" data-height="380" src="../assets/blog/5-common-mistakes-in-developing-a-tech-product/img-03.png"><figcaption class="imageCaption">Photo by <a href="https://luminousmen.com/" data-href="https://luminousmen.com/" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">luminousmen.com</a></figcaption></figure><p name="0523" id="0523" class="graf graf--p graf-after--figure">In the world of software development, if you don’t pay the <strong class="markup--strong markup--p-strong">cost</strong> by putting extra time and effort into the development of a quality code then you have to pay the <strong class="markup--strong markup--p-strong">debt</strong> of refactoring in the future with increased Cost to Change as an <strong class="markup--strong markup--p-strong">interest.</strong></p><blockquote name="c317" id="c317" class="graf graf--blockquote graf-after--p graf--trailing">Avoid accumulating such debt as it increase the cost of development in future and in some case, certain degree of inflexibility develops in the structure of the product which prevent the team from performing certain changes.</blockquote></div></div></section><section name="9bb8" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8d78" id="8d78" class="graf graf--h3 graf--leading">CONCLUSION</h3><p name="39cc" id="39cc" class="graf graf--p graf-after--h3">There are thousands of books for project management and software design practices that help you avoid technical hurdles but the mistakes discussed above are often undiscussed. Some of them are general concepts yet a lot of wise founders and developers fall into these traps.</p><blockquote name="ebab" id="ebab" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Hundreds of software products fails not because of lack of features but due to the over baked code base with unnecessary features. Simple quality software product with few context specific feature is far better than complex software product with cluttered UI offering numerous features. “</blockquote>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/common-mistakes-in-developing-a-software-product-6f0aa8b18a25" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="getting-started-with-azure-iot.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Getting started with Azure IoT</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="why-microservices-are-not-always-the-best-choice.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Why Microservices are not always the best choice</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

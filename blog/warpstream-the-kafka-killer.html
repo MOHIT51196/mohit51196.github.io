@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WarpStream: The Kafka killer · Mohit Malhotra</title>
+  <meta name="description" content="Stop burning money with Kafka" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/warpstream-the-kafka-killer-36e86a73d207" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="WarpStream: The Kafka killer" />
+  <meta property="og:description" content="Stop burning money with Kafka" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Event Streaming</span></div>
+      <h1 class="article__title">WarpStream: The Kafka killer</h1>
+      <p class="article__subtitle">Stop burning money with Kafka</p>
+      <div class="article__meta">
+        <span>Feb 17, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="9f22" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="ff38" id="ff38" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*HKx_ukLMlQmcePMUwSIMkw.png" data-width="2816" data-height="1536" src="../assets/blog/warpstream-the-kafka-killer/img-01.png"></figure><p name="8b8d" id="8b8d" class="graf graf--p graf-after--figure graf--trailing">Kafka is the default choice for event streaming. It is the gold standard. But let’s be honest, maintaining a Kafka cluster is a nightmare.<br>​Between managing ZooKeeper (or KRaft), handling partition rebalancing, and dealing with disk failures, the infrastructure often owns the developer, not the other way around. And then there is the bill. The hidden costs of inter-zone networking fees can silently bleed a budget dry.<br>Is it possible to have the power of Kafka without the operational headache of managing stateful brokers?<br>​Well yes! The answer is <a href="https://www.warpstream.com/" data-href="https://www.warpstream.com/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">WarpStream</a>.</p></div></div></section><section name="fe2a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4411" id="4411" class="graf graf--h3 graf--leading">The Problem</h3><p name="caec" id="caec" class="graf graf--p graf-after--h3">Kafka was designed in a different era. It assumes that storage and compute must live together on the same machine. This architecture forces a series of painful trade-offs:</p><ul class="postList"><li name="ecd2" id="ecd2" class="graf graf--li graf-after--p">​<strong class="markup--strong markup--li-strong">Local disks</strong>: One must manage physical disks. If a disk fills up, the broker stops.</li><li name="520a" id="520a" class="graf graf--li graf-after--li">​<strong class="markup--strong markup--li-strong">Rebalancing</strong>: Adding a new node requires shuffling terabytes of data across the network.</li><li name="da8a" id="da8a" class="graf graf--li graf-after--li graf--trailing">​<strong class="markup--strong markup--li-strong">Cost</strong>: To ensure durability, data is replicated across availability zones (AZs). Cloud providers charge a premium for this cross-AZ traffic.<br>​I wanted a solution that felt serverless, something that separates compute from storage.</li></ul></div></div></section><section name="537c" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="f341" id="f341" class="graf graf--h3 graf--leading">​The Solution</h3><p name="e6de" id="e6de" class="graf graf--p graf-after--h3 graf--trailing">​WarpStream is a drop-in replacement for Apache Kafka. It speaks the Kafka protocol, but it does not store data on local disks. Instead, it writes directly to commodity object storage like Amazon S3.<br>​This changes everything because the data lives in S3, the ‘brokers’ (called Agents in WarpStream) are completely stateless. They are just simple Go binaries that can auto-scale based on CPU load. If an agent dies, it doesn’t matter. There is no data to recover from that specific node because it was never there in the first place.</p></div></div></section><section name="e62f" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="e188" id="e188" class="graf graf--h3 graf--leading">How Warpstream works</h3><figure name="ae4c" id="ae4c" class="graf graf--figure graf-after--h3"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*-qXRiPjycGJ15LMAySN5oA.png" data-width="2816" data-height="1536" src="../assets/blog/warpstream-the-kafka-killer/img-02.png"><figcaption class="imageCaption">Architecture of Warpstream</figcaption></figure><p name="bd3f" id="bd3f" class="graf graf--p graf-after--figure graf--trailing">The architecture is radically simple.<br>​Producers send data to WarpStream Agents using the standard Kafka protocol.<br>​Agents batch these records and write them directly to S3 (or GCS/Azure Blob).<br>​Consumers read data via the agents, which fetch it from S3.<br>​This means durability is outsourced to S3, which is designed for 99.999999999% durability. There is no need to configure replication factors or worry about leader elections.</p></div></div></section><section name="5ebb" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="d2bd" id="d2bd" class="graf graf--h3 graf--leading">The &quot;Hidden&quot; Cost Killer</h3><p name="f943" id="f943" class="graf graf--p graf-after--h3">The most impressive part of this architecture is the cost impact. In a traditional Kafka setup on AWS, a massive chunk of the bill comes from Inter-Zone Data Transfer. Every time a message is replicated from a broker in Zone A to a broker in Zone B, it costs money.<br>​With WarpStream, agents write directly to S3. S3 handles the availability across zones without charging the user for that cross-zone replication traffic. This single architectural decision can cut streaming costs by 80%.</p><p name="c0af" id="c0af" class="graf graf--p graf-after--p">Since WarpStream is wire-compatible with Kafka, there is no need to rewrite application code. Existing libraries work out of the box.<br>​I set up a simple Node.js producer using kafkajs to test the connection.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="javascript" name="2ec2" id="2ec2" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">const</span> { <span class="hljs-title class_">Kafka</span> } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;kafkajs&#x27;</span>)<br /><br /><span class="hljs-keyword">const</span> kafka = <span class="hljs-keyword">new</span> <span class="hljs-title class_">Kafka</span>({<br />  <span class="hljs-attr">clientId</span>: <span class="hljs-string">&#x27;my-app&#x27;</span>,<br />  <span class="hljs-attr">brokers</span>: [<span class="hljs-string">&#x27;b-1.warpstream.svc:9092&#x27;</span>], <span class="hljs-comment">// WarpStream Agent Endpoint</span><br />  <span class="hljs-attr">ssl</span>: <span class="hljs-literal">true</span>,<br />  <span class="hljs-attr">sasl</span>: {<br />    <span class="hljs-attr">mechanism</span>: <span class="hljs-string">&#x27;plain&#x27;</span>,<br />    <span class="hljs-attr">username</span>: <span class="hljs-string">&#x27;warpstream_username&#x27;</span>,<br />    <span class="hljs-attr">password</span>: <span class="hljs-string">&#x27;warpstream_password&#x27;</span><br />  }<br />})<br /><br /><span class="hljs-keyword">const</span> producer = kafka.<span class="hljs-title function_">producer</span>()<br /><br /><span class="hljs-keyword">const</span> <span class="hljs-title function_">run</span> = <span class="hljs-keyword">async</span> (<span class="hljs-params"></span>) =&gt; {<br />  <span class="hljs-keyword">await</span> producer.<span class="hljs-title function_">connect</span>()<br />  <span class="hljs-keyword">await</span> producer.<span class="hljs-title function_">send</span>({<br />    <span class="hljs-attr">topic</span>: <span class="hljs-string">&#x27;test-topic&#x27;</span>,<br />    <span class="hljs-attr">messages</span>: [<br />      { <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Hello WarpStream!&#x27;</span> },<br />    ],<br />  })<br /><br />  <span class="hljs-keyword">await</span> producer.<span class="hljs-title function_">disconnect</span>()<br />}<br /><br /><span class="hljs-title function_">run</span>().<span class="hljs-title function_">catch</span>(<span class="hljs-variable language_">console</span>.<span class="hljs-property">error</span>)<br /><br /><br /></span></pre><p name="ebb4" id="ebb4" class="graf graf--p graf-after--pre graf--trailing">The code is identical to what one would write for a standard Kafka cluster. The application does not know the difference.</p></div></div></section><section name="ffcc" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="dafe" id="dafe" class="graf graf--h3 graf--leading">The Showdown</h3><p name="a24b" id="a24b" class="graf graf--p graf-after--h3">Here is a quick breakdown of why the switch makes sense</p><h4 name="2625" id="2625" class="graf graf--h4 graf-after--p">​Storage</h4><ul class="postList"><li name="770b" id="770b" class="graf graf--li graf-after--h4">​Kafka: Expensive local SSDs.</li><li name="5031" id="5031" class="graf graf--li graf-after--li">​WarpStream: Cheap S3 Object Storage.</li></ul><h4 name="bfed" id="bfed" class="graf graf--h4 graf-after--li">​Scaling</h4><ul class="postList"><li name="fa46" id="fa46" class="graf graf--li graf-after--h4">​Kafka: Hours/Days (Rebalancing data)</li><li name="7144" id="7144" class="graf graf--li graf-after--li">​WarpStream: Seconds (Stateless agents)</li></ul><h4 name="b83a" id="b83a" class="graf graf--h4 graf-after--li">​Operations</h4><ul class="postList"><li name="36b3" id="36b3" class="graf graf--li graf-after--h4">​Kafka: requires a dedicated team</li><li name="c26b" id="c26b" class="graf graf--li graf-after--li">​WarpStream: set and forget</li></ul><h4 name="e3fb" id="e3fb" class="graf graf--h4 graf-after--li">​Latency</h4><ul class="postList"><li name="fb79" id="fb79" class="graf graf--li graf-after--h4">​Kafka: Sub-millisecond (memory/disk)</li><li name="a37c" id="a37c" class="graf graf--li graf-after--li">​WarpStream: ~200ms (S3 write latency)</li></ul><figure name="6117" id="6117" class="graf graf--figure graf-after--li graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*OXYw_3532JTFxbpTBys8og.png" data-width="2048" data-height="2048" src="../assets/blog/warpstream-the-kafka-killer/img-03.png"><figcaption class="imageCaption">Hypothetical cost comparison of Kafka and WarpStream</figcaption></figure></div></div></section><section name="47e5" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="dab8" id="dab8" class="graf graf--h3 graf--leading">Conclusion</h3><p name="2b7c" id="2b7c" class="graf graf--p graf-after--h3">WarpStream provides the reliability of S3 with the interface of Kafka. It eliminates the operational burden and drastically reduces costs. It is time to stop overpaying for complexity.</p><p name="a418" id="a418" class="graf graf--p graf-after--p">​Honestly, the latency trade-off is real with WarpStream. If the use case requires sub-millisecond latency (e.g., high-frequency trading), Kafka is still the winner. For everything else, such as logs, analytics, and change data capture, WarpStream is great.</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/warpstream-the-kafka-killer-36e86a73d207" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="silently-boost-your-backend-performance-with-go-1-26.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Silently boost your backend performance with Go 1.26</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="unlock-true-potential-of-cursor-ai.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Unlock true potential of Cursor AI</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

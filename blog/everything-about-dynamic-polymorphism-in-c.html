@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Everything About Dynamic Polymorphism in C++ · Mohit Malhotra</title>
+  <meta name="description" content="A detailed overview on implementing dynamic polymorphism efficiently" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/everything-about-dynamic-polymorphism-in-c-b4218976d11e" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Everything About Dynamic Polymorphism in C++" />
+  <meta property="og:description" content="A detailed overview on implementing dynamic polymorphism efficiently" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">C++</span></div>
+      <h1 class="article__title">Everything About Dynamic Polymorphism in C++</h1>
+      <p class="article__subtitle">A detailed overview on implementing dynamic polymorphism efficiently</p>
+      <div class="article__meta">
+        <span>Jul 28, 2020</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="5431" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="372a" id="372a" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*rKd9c9Nu0NoBHohxO34Jyw.jpeg" data-width="4430" data-height="2953" data-is-featured="true" src="../assets/blog/everything-about-dynamic-polymorphism-in-c/img-01.jpg"><figcaption class="imageCaption">image from unsplash.com</figcaption></figure><p name="5502" id="5502" class="graf graf--p graf-after--figure">Polymorphism is an important concept of Object oriented programming paradigm. It comprise of two words, <strong class="markup--strong markup--p-strong">poly </strong>which means <em class="markup--em markup--p-em">multiple </em>and <strong class="markup--strong markup--p-strong">morph</strong> which means<strong class="markup--strong markup--p-strong"> </strong><em class="markup--em markup--p-em">states. </em>It can be classified in two ways on the basis of time at which the procedure call is resolved.</p><ul class="postList"><li name="7db1" id="7db1" class="graf graf--li graf-after--p">Static Polymorphism</li><li name="7792" id="7792" class="graf graf--li graf-after--li">Dynamic Polymorphism</li></ul><p name="dacd" id="dacd" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">Static Polymorphism </strong>implies that the invocation (call) to a function is resolved at compile time. It can be implemented using <em class="markup--em markup--p-em">Overloading. </em>Further<em class="markup--em markup--p-em"> d</em>etails of static polymorphism are out of the scope of this article but you can read more about it on <a href="https://www.javatpoint.com/cpp-overloading" data-href="https://www.javatpoint.com/cpp-overloading" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">javatpoint blog about c++ overloading</a>.</p><p name="2cf7" id="2cf7" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Dynamic Polymorphism </strong>implies the runtime resolution of function call. It is implies via <em class="markup--em markup--p-em">Overriding </em>which in turn is followed by inheritance in c++.</p><p name="ae8d" id="ae8d" class="graf graf--p graf-after--p">Here are the examples showing the implementation of static as well as dynamic polymorphism.</p><figure name="5eed" id="5eed" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*1XZSXPSCjEWtKBHEH-3H7A.png" data-width="1196" data-height="1084" src="../assets/blog/everything-about-dynamic-polymorphism-in-c/img-02.png"><figcaption class="imageCaption">Dynamic polymorphism in C++</figcaption></figure><p name="fea0" id="fea0" class="graf graf--p graf-after--figure">Dynamic polymorphism is not so simple as it appears in the syntax. Compiler has to resolve the overloaded function call at runtime. Our aim is to perform this resolution of correct function call efficiently.</p><p name="010b" id="010b" class="graf graf--p graf-after--p">Incase of a simple non casted pointer for an object , we can use this approach and it is also known as <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">early binding</em></strong><em class="markup--em markup--p-em"> </em>as the call is bound to the object pointer at compile time.</p><p name="3fbb" id="3fbb" class="graf graf--p graf-after--p">But incase of casting , early binding would not help. During upcasting, if we need to invoke the polymorphed function then we have to implement the base function as a virtual function. Virtual functions ensure that the correct function is called for an object, regardless of the type of reference (or pointer) used for function call. This is also called <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">late binding</em></strong>.</p><figure name="9c61" id="9c61" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*IWvvHNEhNuY7iFgSpuuVlg.png" data-width="1196" data-height="1084" src="../assets/blog/everything-about-dynamic-polymorphism-in-c/img-03.png"><figcaption class="imageCaption">Dynamic polymorphism with virtual functions</figcaption></figure><p name="61a8" id="61a8" class="graf graf--p graf-after--figure">This is a general way of implementing dynamic polymorphism in C++. Compiler will resolve the call to polymorphed function using <em class="markup--em markup--p-em">virtual table.</em></p><figure name="9abe" id="9abe" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*mbC7Idt0iitvyG6fxA3-sw.jpeg" data-width="662" data-height="553" src="../assets/blog/everything-about-dynamic-polymorphism-in-c/img-04.jpg"></figure><h4 name="ac51" id="ac51" class="graf graf--h4 graf-after--figure">ADVANTAGE</h4><p name="2c3a" id="2c3a" class="graf graf--p graf-after--h4">Virtual table is useful in resolving the call to the child class method. Every instance of a class holds a pointer to virtual table <strong class="markup--strong markup--p-strong">VPTR </strong>which in turn maintains different versions of polymorphed function. It provides a mechanism to resolve the call to the right version of function in a inheritance tree</p><h4 name="4bc3" id="4bc3" class="graf graf--h4 graf-after--p">DISADVANTAGE</h4><p name="b809" id="b809" class="graf graf--p graf-after--h4">Despite of this advantage, there are some drawbacks of this approach. Every time a virtual function is invoked, compiler makes a hit to the Virtual table <strong class="markup--strong markup--p-strong">VTABLE </strong>which makes the call to virtual functions a little expensive.</p><p name="1387" id="1387" class="graf graf--p graf-after--p">Hence, another approach can be used to implement dynamic polymorphism. Templates can be used to implement a generics in a base class. This template can hold a base version of function which can cast the <strong class="markup--strong markup--p-strong">this </strong>pointer to the desired object and can call the function related to that object type.</p><figure name="9577" id="9577" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*1A9Rj1BndHIwGKjZY8uedg.png" data-width="1196" data-height="1084" src="../assets/blog/everything-about-dynamic-polymorphism-in-c/img-05.png"><figcaption class="imageCaption">polymorphism using template</figcaption></figure><p name="7180" id="7180" class="graf graf--p graf-after--figure">This approach comes under the label of <strong class="markup--strong markup--p-strong">TMP</strong> ie. <strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">Template Meta Programming</em></strong></p><h4 name="2073" id="2073" class="graf graf--h4 graf-after--p">ADVANTAGE</h4><p name="9be3" id="9be3" class="graf graf--p graf-after--h4">It mitigate the cost of using a virtual table and also eliminate the use of pointer to the virtual table ( <strong class="markup--strong markup--p-strong">VPTR </strong>). This approach will make the call to the polymorph function just like a normal function as the object resolution mechanism is provided explicitly by the code.</p><p name="952f" id="952f" class="graf graf--p graf-after--p">It also allows the developer to avoid the error of forgetting to define base function as virtual.</p><p name="4d9f" id="4d9f" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">DISADVANTAGE</strong></p><p name="4e1e" id="4e1e" class="graf graf--p graf-after--p graf--trailing">There is nothing like <em class="markup--em markup--p-em">free lunch</em> in this world. Just like the previous approach, this approach also comes with a cost. Templates generate a new copy of base class for each initialisation on compile time. Therefore, it increase the size of object file and hence the binaries. Using a lot of TMP, will unnecessarily bulk up your compiled code.</p></div></div></section><section name="271e" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="399d" id="399d" class="graf graf--h3 graf--leading">CONCLUSION</h3><p name="fb1b" id="fb1b" class="graf graf--p graf-after--h3">Dynamic polymorphism can be introduced in code via overriding. Overriding in turn, can be implemented in two ways :</p><ul class="postList"><li name="402e" id="402e" class="graf graf--li graf-after--p">Virtual functions/methods</li><li name="5a2d" id="5a2d" class="graf graf--li graf-after--li">Template meta programming</li></ul><p name="7b82" id="7b82" class="graf graf--p graf-after--li">Both of the approaches have their pros and cons. Hence, a developer has to decide how to design the code in order to harness the power of dynamic polymorphism.</p><blockquote name="07d3" id="07d3" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Polymorphism is such a powerful concept that if it is implemented in an efficient and clean manner to a feasible limit (not overused) then it can enhance the software structure significantly. “</blockquote>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/everything-about-dynamic-polymorphism-in-c-b4218976d11e" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="everything-about-software-architecture.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Everything about Software Architecture</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="working-with-new-generation-of-python.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Working With New Generation of Python</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why Microservices are not always the best choice · Mohit Malhotra</title>
+  <meta name="description" content="Detailed discussion on the trade-offs with microservices architecture" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/why-microservices-is-not-always-the-best-choice-df5b3b10babb" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Why Microservices are not always the best choice" />
+  <meta property="og:description" content="Detailed discussion on the trade-offs with microservices architecture" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span></div>
+      <h1 class="article__title">Why Microservices are not always the best choice</h1>
+      <p class="article__subtitle">Detailed discussion on the trade-offs with microservices architecture</p>
+      <div class="article__meta">
+        <span>Jan 26, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>3 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="db34" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="4954" id="4954" class="graf graf--p graf-after--h4">Among the tech companies these days , Microservices architecture has became the de facto while designing a system. This architectural approach has gained popularity after the tech gaints like Uber, Airbnb, Facebook etc started using them.</p><figure name="f7a2" id="f7a2" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*E4Lkuw1qDkpH82lH" data-width="7680" data-height="4320" src="../assets/blog/why-microservices-are-not-always-the-best-choice/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@growtika?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@growtika?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Growtika</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><h3 name="efce" id="efce" class="graf graf--h3 graf-after--figure">Whats so good about Microservices</h3><p name="f988" id="f988" class="graf graf--p graf-after--h3 graf--trailing">Microservices has multiple advantages over Monolith architecture as it allows the system to broken down into smaller components called serviceswhere each component handles a single responsibility and can be scaled up or down as per requirement individually. This kind of design offers low coupled independently deployable services which are highly easy to maintain and test individually.</p></div></div></section><section name="61e6" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="ddac" id="ddac" class="graf graf--h3 graf--leading">Great power comes with great responsibilities</h3><p name="35d8" id="35d8" class="graf graf--p graf-after--h3">Because of this trending architectural approach, it is highly likely that if you are running a small startup or company and looking to build a software platform, your CTO or Technology head would suggest you to use microservices. After being a revolutionary architectural approach, this article will talk about why microservices are not for every one.</p><figure name="9684" id="9684" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*Jyr-F0C_L2WaNzmIK5fTeA.jpeg" data-width="1000" data-height="415" src="../assets/blog/why-microservices-are-not-always-the-best-choice/img-02.jpg"></figure><p name="0447" id="0447" class="graf graf--p graf-after--figure graf--trailing">Microservices are recommended for large complex system which requires scaling. While designing microservices, one of the primary focus is on scalability. Incase the organisation is small and aware that a particular software is not made for handling huge traffic or does not require to work on large scale then Monolith is probably the best idea rather than microservices. Lets discuss why?</p></div></div></section><section name="4830" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0694" id="0694" class="graf graf--h3 graf--leading">Microservices are not free lunch</h3><h4 name="3074" id="3074" class="graf graf--h4 graf-after--h3">Expensive to build initially</h4><p name="0083" id="0083" class="graf graf--p graf-after--h4">Multiple services means multiple deployments, which require multiple resources. Hence the upfront cost of deployment is higher as compare to monolith system.</p><h4 name="fc9e" id="fc9e" class="graf graf--h4 graf-after--p">Inter service communication</h4><p name="ecb7" id="ecb7" class="graf graf--p graf-after--h4">Microservices are much harder to design correctly. Multiple services are like multiple moving parts in a machinery which is trying to talk with each other. As the calls between different service are over a network, hence inter service communication needs to be handled correctly. Designing proper inter service communication may require you to setup internal rate limiters, message queues, caches etc.</p><h4 name="c230" id="c230" class="graf graf--h4 graf-after--p">Global testing is a challenge</h4><p name="86f8" id="86f8" class="graf graf--p graf-after--h4">As the software system disintegrated into multiple services which are further distributed on multiple nodes. Testing individual services are much easier but testing the complete system is harder as you require access to each and every component which are separately deployed. Testing the whole microservices based system is much harder than monolith.</p><h4 name="268a" id="268a" class="graf graf--h4 graf-after--p">Debugging challenges</h4><p name="37bd" id="37bd" class="graf graf--p graf-after--h4">Logging and monitoring needs to configured for each individual service and it is much harder to track &amp; debug an issue in a distributed microservices architecture as there are multiple moving parts in a machinery.</p><h4 name="dd71" id="dd71" class="graf graf--h4 graf-after--p">Security challenges</h4><p name="dcf9" id="dcf9" class="graf graf--p graf-after--h4 graf--trailing">As multiple services are deployed in containers separately, more of your system is exposed to the network as compare to the monolithic approach. It’s also worth noting that because containers are highly-replicable, one weak spot in one module can turn into a bigger problem. Hence without rights tools and security setup, maintaining security in microservices can become a nightmare.</p></div></div></section><section name="ca23" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0731" id="0731" class="graf graf--h3 graf--leading">Conclusion</h3><p name="5977" id="5977" class="graf graf--p graf-after--h3">Microservice not doubt has great advantages over other architectural approaches like event driven architecture, monolithic architecture, service based architecture. Microservice become highly cost effective and efficent in a later stage when the system scales upto handle millions of users or it comes highly complex. But in the intial days to need to pay in advance by putting much more effort in designing and developing it.</p><p name="d7dc" id="d7dc" class="graf graf--p graf-after--p">Incase you developing a system which is not meant to be scaled up for significant amount of users. You should probably rethink before using microservices, as monoliths can be much more useful in that scenario.</p><blockquote name="fa17" id="fa17" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ In world of software engineering, you need to understand that there cannot be a single generic solution for all of kind of use cases. Microservices are meant for scale and using it unnecessarily can be expensive and troublesome “</blockquote>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/why-microservices-is-not-always-the-best-choice-df5b3b10babb" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="5-common-mistakes-in-developing-a-tech-product.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">5 Common mistakes in developing a tech product</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="everything-about-software-architecture.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Everything about Software Architecture</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How Nodejs Actually Works · Mohit Malhotra</title>
+  <meta name="description" content="Anatomy of Node.js asynchronous I/O and event-driven architecture" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/how-nodejs-actually-works-a49e91d2b606" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="How Nodejs Actually Works" />
+  <meta property="og:description" content="Anatomy of Node.js asynchronous I/O and event-driven architecture" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Node.js</span></div>
+      <h1 class="article__title">How Nodejs Actually Works</h1>
+      <p class="article__subtitle">Anatomy of Node.js asynchronous I/O and event-driven architecture</p>
+      <div class="article__meta">
+        <span>Jul 29, 2024</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="bd79" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="becb" id="becb" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*jGaYnrj-XdICn7IU" data-width="3840" data-height="2160" src="../assets/blog/how-nodejs-actually-works/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@growtika?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@growtika?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Growtika</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="fd78" id="fd78" class="graf graf--p graf-after--figure">Nodejs is a quite famous and widely adopted language by enterprises as well as open source community. Because of its unique event-driven architecture, it can magically handle alot of async operations being a single thread language. Most of developers think its because of the magician named <em class="markup--em markup--p-em">event loop </em>but its more or less like a black box to them.</p><figure name="e896" id="e896" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*5OZP_wYcltBF3tav52_7jg.jpeg" data-width="700" data-height="372" src="../assets/blog/how-nodejs-actually-works/img-02.jpg"></figure><p name="a171" id="a171" class="graf graf--p graf-after--figure graf--trailing">By the end of this story, you will be able to visualise how you Nodejs code actually works under the hood.</p></div></div></section><section name="b232" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="7932" id="7932" class="graf graf--h3 graf--leading">Where execution happens</h3><p name="c128" id="c128" class="graf graf--p graf-after--h3">Nodejs executes with help Node runtime. It is asynchronous event-driven JavaScript runtime. Just like Java has JRE (Java runtime environment).</p><p name="2cbf" id="2cbf" class="graf graf--p graf-after--p">Following are the major components of Node runtime which we will talk about.</p><h4 name="fbcd" id="fbcd" class="graf graf--h4 graf-after--p">Event loop</h4><p name="e6fe" id="e6fe" class="graf graf--p graf-after--h4">Nodejs is single thread with respect to the user (developer) but it internally use multiple threads for its working. Nodejs use <a href="https://libuv.org/" data-href="https://libuv.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">libuv</a> which is a multi platform C++ library to support asynchronous IO. By default, 4 threads are available for <a href="https://libuv.org/" data-href="https://libuv.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">libuv</a> in a Nodejs application which supports asynchronisation to the app. The <a href="https://libuv.org/" data-href="https://libuv.org/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">libuv</a> library provides the infamous event loop to Node runtime.</p><blockquote name="a006" id="a006" class="graf graf--blockquote graf-after--p">Tip : You can increase thread pool size of libuv by setting <strong class="markup--strong markup--blockquote-strong"><em class="markup--em markup--blockquote-em">process.env.UV_THREADPOOL_SIZE</em></strong></blockquote><h4 name="b6ba" id="b6ba" class="graf graf--h4 graf-after--blockquote">WebAPIs</h4><p name="87d2" id="87d2" class="graf graf--p graf-after--h4">Web APIs refers to collection inbuilt Node or browser supported APIs like Timers (setTimeout, setInterval), fetch, File APIs, URL.</p><h4 name="df32" id="df32" class="graf graf--h4 graf-after--p">Task queues</h4><p name="9e51" id="9e51" class="graf graf--p graf-after--h4">Can be called macro task queue, which primarily handles async callbacks especially from WebAPIs like callback for setTimout or fetch.</p><h4 name="7d70" id="7d70" class="graf graf--h4 graf-after--p">Micro task queue</h4><p name="7fcb" id="7fcb" class="graf graf--p graf-after--h4">Specialised task queue, which handles the promise handlers (then, catch, finally callbacks), <a href="https://nodejs.org/docs/v20.15.1/api/globals.html#queuemicrotaskcallback" data-href="https://nodejs.org/docs/v20.15.1/api/globals.html#queuemicrotaskcallback" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">queueMicroTask</a>, Mutation Observer callback and function body after keyword ‘await’.</p><h4 name="056f" id="056f" class="graf graf--h4 graf-after--p">Call stack</h4><p name="603b" id="603b" class="graf graf--p graf-after--h4">Call stack similar to any other programming language which is use to push function calls for execution and then pop after execution ends.</p><p name="cd1d" id="cd1d" class="graf graf--p graf-after--p graf--trailing">For those who have might questions, Node runtime also has other components like heap, garbage collector etc but they are excluded for the sake of simplicity.</p></div></div></section><section name="be50" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="0dd8" id="0dd8" class="graf graf--h3 graf--leading">How execution happens</h3><p name="9b8d" id="9b8d" class="graf graf--p graf-after--h3">This is how you can visualize the Node runtime with required components.</p><figure name="130a" id="130a" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*LRNZ9U_Blq7g_SCY2Qw2uQ.png" data-width="2442" data-height="1360" src="../assets/blog/how-nodejs-actually-works/img-03.png"><figcaption class="imageCaption">Internals of Node runtime</figcaption></figure><p name="c01f" id="c01f" class="graf graf--p graf-after--figure">When code executes line by line by <a href="https://v8.dev/docs" data-href="https://v8.dev/docs" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">V8 engine</a>, variables are initialised and then a function call gets pushed to call stack. If this is a blocking Web API call such as setTimeout or fetch, it gets offloaded to Node runtime for async execution and pops out of call stack. Otherwise non blocking call such as console.log, get executed and pops out similarly.</p><blockquote name="a351" id="a351" class="graf graf--blockquote graf-after--p">Explaining how blocking Web API call such as fetch natively works with file descriptors and mechanisms like kqueue or epoll is deliberatly kept out of scope atleast for this discussion.</blockquote><p name="33e9" id="33e9" class="graf graf--p graf-after--blockquote">After completion or error, Web APIs handlers are pushed to the task queues. If its a callback based Web API, callback will be pushed to task queue otherwise for promise base API, promise handlers such as then and catch calls will be pushed to micro task queue.</p><p name="7743" id="7743" class="graf graf--p graf-after--p">Here, event loops comes into the picture and now it checks firstly the micro task queue and pops out the call which is then push to the call stack for V8 engine to execute. After micro task queue is empty, event loop will pick task queue calls and similarly transfer them to call stack.</p><blockquote name="bba5" id="bba5" class="graf graf--blockquote graf-after--p">A thing to note is that micro task queue has higher priority than task queue for event loop. You can also block Node process by recursively putting calls on micro task queue 😈.</blockquote><p name="5c63" id="5c63" class="graf graf--p graf-after--blockquote graf--trailing">Event loop is single threaded and its job is to pickup pending calls from task queues and put them in call stack for execution whereas blocking IO operations are actually performed by Web APIs which internally utilise libuv threads (by default 4) for asynchronous execution.</p></div></div></section><section name="a221" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="dda4" id="dda4" class="graf graf--h3 graf--leading">What we learned</h3><p name="8e2e" id="8e2e" class="graf graf--p graf-after--h3">Following are some take ways (tips and tricks) from this article to enhance your understanding with Nodejs.</p><ul class="postList"><li name="60da" id="60da" class="graf graf--li graf-after--p">Event loop utilisation is largely dependent on how you have coded your application. This is the reason callback to setInterval doesn’t execute with exact time delays. You can even block the event loop by your will.</li><li name="22f2" id="22f2" class="graf graf--li graf-after--li">Promises gets higher priority as compare to callback APIs. Hence prefer using promised based Web APIs if important. Try wrapping a call with <strong class="markup--strong markup--li-strong">queueMicroTask</strong>(callback) .</li><li name="3878" id="3878" class="graf graf--li graf-after--li">Increase number of threads in libuv pool by assigning <strong class="markup--strong markup--li-strong">process.env.UV_THREADPOOL_SIZE<em class="markup--em markup--li-em"> = </em></strong>value , where value ≤ 1024.</li><li name="06ba" id="06ba" class="graf graf--li graf-after--li">You can execute a call before next iteration of event loop by hooking into the loop using process.nextTick</li><li name="9180" id="9180" class="graf graf--li graf-after--li">Use <a href="https://nodejs.org/api/worker_threads.html" data-href="https://nodejs.org/api/worker_threads.html" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank">worker threads</a> to utilize libuv threads for performing CPU intensive task (like cryptography, compression, video encoding) as multi threaded operations</li></ul><figure name="d77f" id="d77f" class="graf graf--figure graf-after--li"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*0NCyhVd-B3lCsyGI2ZUoYw.jpeg" data-width="680" data-height="411" src="../assets/blog/how-nodejs-actually-works/img-04.jpg"></figure><p name="a257" id="a257" class="graf graf--p graf-after--figure graf--trailing"><strong class="markup--strong markup--p-strong">Don’t forget to follow me on Medium for more such content and give a clap if you like it.</strong></p></div></div></section><section name="37a2" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="72a1" id="72a1" class="graf graf--h3 graf--leading">References</h3><ul class="postList"><li name="79ae" id="79ae" class="graf graf--li graf-after--h3"><a href="https://libuv.org/" data-href="https://libuv.org/" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank">https://libuv.org/</a></li><li name="9120" id="9120" class="graf graf--li graf-after--li"><a href="https://v8.dev/docs" data-href="https://v8.dev/docs" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank">https://v8.dev/docs</a></li><li name="c528" id="c528" class="graf graf--li graf-after--li"><a href="https://developer.mozilla.org/en-US/docs/Web/API" data-href="https://developer.mozilla.org/en-US/docs/Web/API" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API</a></li><li name="4727" id="4727" class="graf graf--li graf-after--li"><a href="https://nodejs.org/en/learn/asynchronous-work/understanding-processnexttick" data-href="https://nodejs.org/en/learn/asynchronous-work/understanding-processnexttick" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://nodejs.org/en/learn/asynchronous-work/understanding-processnexttick</a></li><li name="bec3" id="bec3" class="graf graf--li graf-after--li"><a href="https://nodejs.org/docs/v20.15.1/api/globals.html#queuemicrotaskcallback" data-href="https://nodejs.org/docs/v20.15.1/api/globals.html#queuemicrotaskcallback" class="markup--anchor markup--li-anchor" rel="nofollow noopener" target="_blank">https://nodejs.org/docs/v20.15.1/api/globals.html#queuemicrotaskcallback</a></li></ul><h3 name="916e" id="916e" class="graf graf--h3 graf-after--li">In Plain English 🚀</h3><p name="a68c" id="a68c" class="graf graf--p graf-after--h3"><em class="markup--em markup--p-em">Thank you for being a part of the </em><a href="https://plainenglish.io" data-href="https://plainenglish.io" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong"><em class="markup--em markup--p-em">In Plain English</em></strong></a><em class="markup--em markup--p-em"> community! Before you go:</em></p><ul class="postList"><li name="b427" id="b427" class="graf graf--li graf-after--p">Be sure to <strong class="markup--strong markup--li-strong">clap</strong> and <strong class="markup--strong markup--li-strong">follow</strong> the writer ️👏<strong class="markup--strong markup--li-strong">️️</strong></li><li name="6d7f" id="6d7f" class="graf graf--li graf-after--li">Follow us: <a href="https://twitter.com/inPlainEngHQ" data-href="https://twitter.com/inPlainEngHQ" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">X</strong></a> | <a href="https://www.linkedin.com/company/inplainenglish/" data-href="https://www.linkedin.com/company/inplainenglish/" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">LinkedIn</strong></a> | <a href="https://www.youtube.com/channel/UCtipWUghju290NWcn8jhyAw" data-href="https://www.youtube.com/channel/UCtipWUghju290NWcn8jhyAw" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">YouTube</strong></a> | <a href="https://discord.gg/in-plain-english-709094664682340443" data-href="https://discord.gg/in-plain-english-709094664682340443" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Discord</strong></a> | <a href="https://newsletter.plainenglish.io/" data-href="https://newsletter.plainenglish.io/" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Newsletter</strong></a></li><li name="5666" id="5666" class="graf graf--li graf-after--li">Visit our other platforms: <a href="https://cofeed.app/" data-href="https://cofeed.app/" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">CoFeed</strong></a> | <a href="https://differ.blog/" data-href="https://differ.blog/" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Differ</strong></a></li><li name="5ec2" id="5ec2" class="graf graf--li graf-after--li graf--trailing">More content at <a href="https://plainenglish.io" data-href="https://plainenglish.io" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">PlainEnglish.io</strong></a></li></ul></div></div></section>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/how-nodejs-actually-works-a49e91d2b606" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="monitoring-with-grafana-graphite.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Monitoring with Grafana &amp; Graphite</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="circuit-breakers-in-microservices.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Circuit breakers in Microservices</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silently boost your backend performance with Go 1.26 · Mohit Malhotra</title>
+  <meta name="description" content="Explaining whats HOT in Go 1.26 release" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/silently-boost-your-backend-performance-with-go-1-26-293ef5ae35af" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Silently boost your backend performance with Go 1.26" />
+  <meta property="og:description" content="Explaining whats HOT in Go 1.26 release" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Go</span></div>
+      <h1 class="article__title">Silently boost your backend performance with Go 1.26</h1>
+      <p class="article__subtitle">Explaining whats HOT in Go 1.26 release</p>
+      <div class="article__meta">
+        <span>Feb 18, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="769d" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="f361" id="f361" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*Q9CS6q3psp-futHPP2WDIQ.jpeg" data-width="1400" data-height="705" src="../assets/blog/silently-boost-your-backend-performance-with-go-1-26/img-01.jpg"></figure><p name="7da4" id="7da4" class="graf graf--p graf-after--figure">Most developers treat Go updates like a routine chore <code class="markup--code markup--p-code">brew upgrade go</code>, check if the build passes, and move on. Go has built a reputation for being &quot;boring&quot; and that is usually a compliment. It implies stability, backward compatibility, and no breaking changes.</p><p name="558d" id="558d" class="graf graf--p graf-after--p">But <a href="https://go.dev/blog/go1.26" data-href="https://go.dev/blog/go1.26" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Go 1.26</a> is different. While it doesn’t introduce a paradigm shift like Generics in 1.18, it brings a collection of “quality of life” improvements and a massive under-the-hood performance boost that you get strictly for free.</p><p name="9ee8" id="9ee8" class="graf graf--p graf-after--p">If you are running high-throughput services or writing complex APIs, this release directly impacts your bottom line. Let’s dive into the hidden gems of Go 1.26 and how to use them like a pro.</p><h3 name="5ff4" id="5ff4" class="graf graf--h3 graf-after--p">The <code class="markup--code markup--h3-code">new</code> keyword</h3><p name="4c02" id="4c02" class="graf graf--p graf-after--h3">For years, initializing a pointer to a primitive value in Go was clunky. You couldn’t just get a pointer to a literal. You had to create a variable first, then point to it.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="go" name="d852" id="d852" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-comment">// Boilerplate city</span><br />val := <span class="hljs-type">int64</span>(<span class="hljs-number">300</span>)<br />ptr := &amp;val<br /><br /><span class="hljs-comment">// Or using a helper function you probably wrote yourself</span><br /><span class="hljs-function"><span class="hljs-keyword">func</span> <span class="hljs-title">Int64Ptr</span><span class="hljs-params">(i <span class="hljs-type">int64</span>)</span></span> *<span class="hljs-type">int64</span> { <span class="hljs-keyword">return</span> &amp;i }<br />ptr := Int64Ptr(<span class="hljs-number">300</span>)</span></pre><p name="1750" id="1750" class="graf graf--p graf-after--pre">This pattern littered codebases, especially when dealing with optional JSON fields or SQL nullable types. But Go 1.26 introduces <code class="markup--code markup--p-code">new(expr)</code>. The built-in <code class="markup--code markup--p-code">new</code> function now accepts an expression, specifying the initial value of the variable.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="go" name="195f" id="195f" class="graf graf--pre graf-after--p graf--trailing graf--preV2"><span class="pre--content"><span class="hljs-comment">// Clean, readable, and standard</span><br />ptr := <span class="hljs-built_in">new</span>(<span class="hljs-type">int64</span>(<span class="hljs-number">300</span>))<br /><br /><span class="hljs-comment">// Works with structs too</span><br />config := <span class="hljs-built_in">new</span>(Config{<br />    Port: <span class="hljs-number">8080</span>,<br />    Debug: <span class="hljs-literal">true</span>,<br />})</span></pre></div></div></section><section name="5fe1" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3202" id="3202" class="graf graf--h3 graf--leading">Green Tea GC</h3><figure name="81c2" id="81c2" class="graf graf--figure graf-after--h3"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*ZRSV6qZw8vxuJ3JvThLw7w.jpeg" data-width="2816" data-height="1536" src="../assets/blog/silently-boost-your-backend-performance-with-go-1-26/img-02.jpg"><figcaption class="imageCaption">GC overhead reduced by almost 40%</figcaption></figure><p name="0ebc" id="0ebc" class="graf graf--p graf-after--figure">Garbage collection (GC) pauses are the silent killers of high-performance systems. In Go 1.26, the team has enabled the <strong class="markup--strong markup--p-strong">Green Tea Garbage Collector</strong> by default.</p><p name="fde9" id="fde9" class="graf graf--p graf-after--p">Previously an experimental feature, Green Tea is designed to improve the performance of marking and scanning small objects, a scenario extremely common in microservices handling JSON requests.</p><p name="d545" id="d545" class="graf graf--p graf-after--p">The results? A <strong class="markup--strong markup--p-strong">10–40% reduction in GC overhead</strong> for typical workloads.</p><p name="c851" id="c851" class="graf graf--p graf-after--p">You don’t need to change a single line of code to get this benefit. However, if you are strictly tuning for low latency, you should audit your metrics after upgrading.</p><blockquote name="47cd" id="47cd" class="graf graf--blockquote graf-after--p"><strong class="markup--strong markup--blockquote-strong">Pro Tip:</strong> If you suspect the new GC behavior is affecting your specific edge case, you can temporarily opt-out (though I wouldn’t recommend it long-term) using <code class="markup--code markup--blockquote-code">GOEXPERIMENT=nogreenteagc go build .</code></blockquote><p name="88de" id="88de" class="graf graf--p graf-after--blockquote graf--trailing">But for 99% of use cases, this is simply free speed.</p></div></div></section><section name="96dc" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c272" id="c272" class="graf graf--h3 graf--leading">Self-Referential Types</h3><p name="32af" id="32af" class="graf graf--p graf-after--h3">When Generics first landed, they had limitations. One frustration was defining complex data structures where a type needed to refer to itself in its own constraint.</p><p name="ad84" id="ad84" class="graf graf--p graf-after--p">Go 1.26 lifts this restriction. Generic types can now refer to themselves in their own type parameter list.</p><h4 name="ddcf" id="ddcf" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">Why does this matter?</strong></h4><p name="695b" id="695b" class="graf graf--p graf-after--h4">It simplifies the implementation of graph structures, linked lists, and fluent APIs that use generics.</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="scss" name="9e06" id="9e06" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-comment">// Previously, this was a headache. </span><br /><span class="hljs-comment">// Now, it&#x27;s straightforward.</span><br />type Node<span class="hljs-selector-attr">[T any]</span> struct {<br />    Value T<br />    Next  *Node<span class="hljs-selector-attr">[T]</span> <span class="hljs-comment">// Self-referential use is cleaner</span><br />}<br /><br /><span class="hljs-comment">// Or more complex constraints for fluent interfaces</span><br />type Builder<span class="hljs-selector-attr">[B any]</span> interface {<br />    <span class="hljs-built_in">Build</span>() <span class="hljs-selector-tag">B</span><br />    <span class="hljs-built_in">SetNext</span>(B) <span class="hljs-selector-tag">B</span><br />}</span></pre><p name="fceb" id="fceb" class="graf graf--p graf-after--pre">This allows for more expressive libraries without the “gymnastics” we previously had to perform to satisfy the compiler.</p><h3 name="8534" id="8534" class="graf graf--h3 graf-after--p">Revamped ‘go fix’</h3><p name="16be" id="16be" class="graf graf--p graf-after--h3">Technical debt accumulates silently. Deprecated APIs linger because refactoring them is tedious.</p><p name="eb22" id="eb22" class="graf graf--p graf-after--p">The <code class="markup--code markup--p-code">go fix</code> command has been completely rewritten in 1.26 to use the standard Go analysis framework. It now includes modernizers ie. analyzers that don&#39;t just fix bugs but actively suggest newer, better idioms.</p><p name="4772" id="4772" class="graf graf--p graf-after--p graf--trailing">It can automatically inline certain function calls and update your code to use the latest standard library features, ensuring your codebase doesn’t rot over time.</p></div></div></section><section name="fd5f" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="debb" id="debb" class="graf graf--h3 graf--leading">CGO Overhead Reduced</h3><p name="0ed9" id="0ed9" class="graf graf--p graf-after--h3">If you are using Go for systems programming, cryptography, or interacting with legacy C libraries, you know the <strong class="markup--strong markup--p-strong">CGO tax</strong> ie. the performance penalty paid every time Go calls C code.</p><p name="522b" id="522b" class="graf graf--p graf-after--p">Go 1.26 reduces the baseline runtime overhead of CGO calls by approximately <strong class="markup--strong markup--p-strong">30%</strong>.</p><p name="cd93" id="cd93" class="graf graf--p graf-after--p">This is achieved through optimizations in the runtime’s stack switching and scheduler interactions. For applications that rely heavily on libraries like <code class="markup--code markup--p-code">sqlite3</code> (which uses CGO) or custom graphics drivers, this translates to a significant throughput increase.</p><figure name="3f85" id="3f85" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*bJ_D5sRbFJ7DzrpyKfHMPQ.jpeg" data-width="2816" data-height="1536" src="../assets/blog/silently-boost-your-backend-performance-with-go-1-26/img-03.jpg"><figcaption class="imageCaption">Go gopher lifting the C code</figcaption></figure></div></div></section><section name="e267" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c38f" id="c38f" class="graf graf--h3 graf--leading">Conclusion</h3><p name="f104" id="f104" class="graf graf--p graf-after--h3">Go 1.26 isn’t flashy, but it is substantial. It targets the friction points of daily development:</p><ul class="postList"><li name="8e39" id="8e39" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Syntactical sugar </strong>: <code class="markup--code markup--li-code">new(expr)</code> cleans up pointer spaghetti.</li><li name="9b21" id="9b21" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Performance </strong>: Green Tea GC and CGO improvements make apps faster by default.</li><li name="4bb7" id="4bb7" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Maintainability </strong>: A smarter <code class="markup--code markup--li-code">go fix</code> helps keep code fresh.</li></ul><p name="d301" id="d301" class="graf graf--p graf-after--li">Update your toolchain, delete those helper functions, and enjoy the free performance boost. Happy coding with Go 1.26 !!</p><figure name="7146" id="7146" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*6IObaL3ZwFVsyn0dnDE58Q.gif" data-width="500" data-height="500" src="../assets/blog/silently-boost-your-backend-performance-with-go-1-26/img-04.gif"><figcaption class="imageCaption">Happy coding with Go 1.26</figcaption></figure>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/silently-boost-your-backend-performance-with-go-1-26-293ef5ae35af" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="art-of-autoscaling-in-kubernetes.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Art of Autoscaling in Kubernetes</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="warpstream-the-kafka-killer.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">WarpStream: The Kafka killer</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

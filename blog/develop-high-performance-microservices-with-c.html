@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Develop High Performance Microservices with C++ · Mohit Malhotra</title>
+  <meta name="description" content="Because sometimes ‘good enough’ isn’t fast enough" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/develop-high-performance-microservices-with-c-4dafbe0e7e39" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Develop High Performance Microservices with C++" />
+  <meta property="og:description" content="Because sometimes ‘good enough’ isn’t fast enough" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span><span class="tag">C++</span></div>
+      <h1 class="article__title">Develop High Performance Microservices with C++</h1>
+      <p class="article__subtitle">Because sometimes ‘good enough’ isn’t fast enough</p>
+      <div class="article__meta">
+        <span>Feb 2, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="f8fe" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="7b6e" id="7b6e" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*VCYHj8BRBZ_Lj2Cp" data-width="6000" data-height="4000" data-unsplash-photo-id="OSz9Qty-AUk" data-is-featured="true" src="../assets/blog/develop-high-performance-microservices-with-c/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@ayumikubo?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@ayumikubo?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">ayumi kubo</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="8060" id="8060" class="graf graf--p graf-after--figure">In the world of distributed systems and microservices, we often trade raw performance for developer velocity. Some developers default to Node.js for its asynchronous I/O model or Go for its concurrency primitives. But there comes a point in every high-scale system’s lifecycle where latency requirements become non-negotiable, and the overhead of a runtime environment becomes a bottleneck.</p><p name="7298" id="7298" class="graf graf--p graf-after--p graf--trailing">In this story, we are going to dissecting a C++ based HTTP application framework that consistently dominates the benchmarks, often processing requests 10x to 50x faster than high-level frameworks such as Node.js.</p></div></div></section><section name="a685" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3bf9" id="3bf9" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong">Why use C++ ?</strong></h3><p name="0ed7" id="0ed7" class="graf graf--p graf-after--h3">Historically, writing a web server in C++ was a nightmare of manual memory management and socket handling. However, modern C++ (C++14/17/20) has introduced features like smart pointers, lambdas, and coroutines that make it surprisingly ergonomic, almost like writing Typescript, but with the raw power of machine code.<br> The “Magic” of Drogon lies in its architecture</p><ul class="postList"><li name="752b" id="752b" class="graf graf--li graf-after--p">Non-blocking I/O: Similar to Node.js, but without the V8 engine overhead.</li><li name="7fee" id="7fee" class="graf graf--li graf-after--li">One Loop Per Thread: Unlike Node’s single-threaded event loop, Drogon utilizes a reactor pattern where each CPU core runs its own event loop. This allows it to scale linearly with hardware.</li><li name="5a37" id="5a37" class="graf graf--li graf-after--li graf--trailing">Compile-time Reflection: It creates routes and maps JSON to objects at compile time, removing runtime reflection costs.</li></ul></div></div></section><section name="9d6a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="5265" id="5265" class="graf graf--h3 graf--leading">The Code Showdown</h3><p name="a50c" id="a50c" class="graf graf--p graf-after--h3">Let’s look at how we actually implement common API patterns. Many developers fear C++ is too verbose. To debunk this, let’s compare Express.js (Node) and Drogon (C++) side-by-side.</p><p name="faf9" id="faf9" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">The “Hello World” API</strong></p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="javascript" name="99ff" id="99ff" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">const</span> express = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;express&#x27;</span>);<br /><span class="hljs-keyword">const</span> app = <span class="hljs-title function_">express</span>();<br /><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">PORT</span> = <span class="hljs-number">3000</span>;<br /><br />app.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {<br />  res.<span class="hljs-title function_">json</span>({ <span class="hljs-attr">message</span>: <span class="hljs-string">&quot;Hello World&quot;</span> });<br />});<br /><br />app.<span class="hljs-title function_">listen</span>(<span class="hljs-variable constant_">PORT</span>, <span class="hljs-function">() =&gt;</span> {<br />  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Express server running at http://localhost:<span class="hljs-subst">${PORT}</span>`</span>);<br />});</span></pre><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="cpp" name="4fdd" id="4fdd" class="graf graf--pre graf-after--pre graf--preV2"><span class="pre--content"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;drogon/drogon.h&gt;</span></span><br /><br /><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{<br />    drogon::<span class="hljs-built_in">app</span>().<span class="hljs-built_in">registerHandler</span>(<span class="hljs-string">&quot;/&quot;</span>, <br />        [](<span class="hljs-type">const</span> drogon::HttpRequestPtr &amp;req, <br />           std::function&lt;<span class="hljs-built_in">void</span> (<span class="hljs-type">const</span> drogon::HttpResponsePtr &amp;)&gt; &amp;&amp;callback) {<br />            <br />            Json::Value json;<br />            json[<span class="hljs-string">&quot;message&quot;</span>] = <span class="hljs-string">&quot;Hello World&quot;</span>;<br />            <span class="hljs-keyword">auto</span> resp = drogon::HttpResponse::<span class="hljs-built_in">newHttpJsonResponse</span>(json);<br />            <span class="hljs-built_in">callback</span>(resp);<br />        }<br />    );<br /><br />    drogon::<span class="hljs-built_in">app</span>().<span class="hljs-built_in">addListener</span>(<span class="hljs-string">&quot;0.0.0.0&quot;</span>, <span class="hljs-number">3000</span>);<br />    LOG_INFO &lt;&lt; <span class="hljs-string">&quot;Drogon server running at http://localhost:3000&quot;</span>;<br />    drogon::<span class="hljs-built_in">app</span>().<span class="hljs-built_in">run</span>();<br />    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br />}</span></pre><p name="ece4" id="ece4" class="graf graf--p graf-after--pre"><strong class="markup--strong markup--p-strong">Handling query parameters</strong></p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="javascript" name="7b32" id="7b32" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">app.<span class="hljs-title function_">get</span>(’/search’, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {   <br />  <span class="hljs-keyword">const</span> query = req.<span class="hljs-property">query</span>.<span class="hljs-property">q</span>;   <br />  res.<span class="hljs-title function_">send</span>(<span class="hljs-string">`Searching for: <span class="hljs-subst">${query}</span>`</span>); <br />});</span></pre><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="rust" name="92c3" id="92c3" class="graf graf--pre graf-after--pre graf--preV2"><span class="pre--content"><span class="hljs-title function_ invoke__">app</span>().<span class="hljs-title function_ invoke__">registerHandler</span>(<span class="hljs-string">&quot;/search&quot;</span>,    <br />  [](<span class="hljs-keyword">const</span> HttpRequestPtr &amp;req, std::function&lt;<span class="hljs-title function_ invoke__">void</span> (<span class="hljs-keyword">const</span> HttpResponsePtr &amp;)&gt; &amp;&amp;callback) {   <br />    std::string query = req<span class="hljs-punctuation">-&gt;</span><span class="hljs-title function_ invoke__">getParameter</span>(<span class="hljs-string">&quot;q&quot;</span>);        <br />    auto resp = HttpResponse::<span class="hljs-title function_ invoke__">newHttpResponse</span>();   <br />    resp<span class="hljs-punctuation">-&gt;</span><span class="hljs-title function_ invoke__">setBody</span>(<span class="hljs-string">&quot;Searching for: &quot;</span> + query);   <br />    <span class="hljs-title function_ invoke__">callback</span>(resp);   <br />});</span></pre><p name="9f5e" id="9f5e" class="graf graf--p graf-after--pre"><strong class="markup--strong markup--p-strong">Using middleware (Interceptors)</strong></p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="javascript" name="1ab2" id="1ab2" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">const</span> <span class="hljs-title function_">authMiddleware</span> = (<span class="hljs-params">req, res, next</span>) =&gt; {   <br />  <span class="hljs-keyword">if</span> (!req.<span class="hljs-property">headers</span>[’authorization’]) <span class="hljs-keyword">return</span> res.<span class="hljs-title function_">sendStatus</span>(<span class="hljs-number">401</span>);   <br />  <span class="hljs-title function_">next</span>(); <br />}; <br />app.<span class="hljs-title function_">get</span>(’/admin’, authMiddleware, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> { <span class="hljs-comment">/*...*/</span> });</span></pre><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="cpp" name="cb6e" id="cb6e" class="graf graf--pre graf-after--pre graf--trailing graf--preV2"><span class="pre--content"><span class="hljs-keyword">class</span> <span class="hljs-title class_">AuthFilter</span> : <span class="hljs-keyword">public</span> drogon::HttpFilter&lt;AuthFilter&gt; {   <br />  <span class="hljs-function"><span class="hljs-type">void</span> <span class="hljs-title">doFilter</span><span class="hljs-params">(<span class="hljs-type">const</span> HttpRequestPtr &amp;req, FilterCallback &amp;&amp;fcb, FilterChainCallback &amp;&amp;fccb)</span> <br />  <span class="hljs-keyword">override</span> </span>{   <br />    <span class="hljs-keyword">if</span> (req-&gt;<span class="hljs-built_in">getHeader</span>(<span class="hljs-string">&quot;Authorization&quot;</span>).<span class="hljs-built_in">empty</span>()) {   <br />        <span class="hljs-built_in">fcb</span>(HttpResponse::<span class="hljs-built_in">newHttpResponse</span>(k401Unauthorized, <span class="hljs-string">&quot;No Auth&quot;</span>));   <br />        <span class="hljs-keyword">return</span>;   <br />    }   <br />    <span class="hljs-built_in">fccb</span>(); <span class="hljs-comment">// Next   </span><br />  } <br />};<br /><br /><span class="hljs-built_in">app</span>().<span class="hljs-built_in">registerHandler</span>(<span class="hljs-string">&quot;/admin&quot;</span>, handlerFunc, {Get, <span class="hljs-string">&quot;AuthFilter&quot;</span>});</span></pre></div></div></section><section name="ebb0" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="bfd9" id="bfd9" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong">The Benchmark: Numbers Don’t Lie</strong></h3><p name="c9fa" id="c9fa" class="graf graf--p graf-after--h3">This is where the architectural differences manifest into reality. When we subject both servers to high concurrency, the results are staggering.<br>Following are the results according to the TechEmpower Web Framework Benchmarks (Round 22/23), which measures requests per second (RPS) and latency</p><figure name="54cd" id="54cd" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*TWWX_aN1GnZet2ld5RosLQ.jpeg" data-width="966" data-height="486" src="../assets/blog/develop-high-performance-microservices-with-c/img-02.jpg"><figcaption class="imageCaption">Benchmarks of C++ vs Node.js</figcaption></figure><p name="c31d" id="c31d" class="graf graf--p graf-after--figure graf--trailing"><a href="https://github.com/drogonframework/drogon" data-href="https://github.com/drogonframework/drogon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Drogon (C++)</a> handles roughly 25x more requests than Express on the same hardware. In the 99th percentile (p99), Node.js can spike due to Garbage Collection pauses. <a href="https://github.com/drogonframework/drogon" data-href="https://github.com/drogonframework/drogon" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Drogon (C++)</a>, having manual control over memory (and RAII), maintains a flat latency curve even under heavy load.</p></div></div></section><section name="710a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="d606" id="d606" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong">Conclusion</strong></h3><p name="2178" id="2178" class="graf graf--p graf-after--h3">As a developer, you should be versatile enough to use correct tool for the correct job. Hence, stick to something like Node.js for rapid development of IO-heavy, logic-light services but C++ can utilised for “Tier-1” high-throughput services where latency is money.</p><blockquote name="3b44" id="3b44" class="graf graf--pullquote graf-after--p">Understanding the anatomy of asynchronous I/O in Node.js gave us the ability to write non-blocking code. Moving to C++ with frameworks like Drogon gives us that same non-blocking capability but removes the abstraction tax.</blockquote><p name="f599" id="f599" class="graf graf--p graf-after--pullquote">You can also check out more such powerful frameworks in C++ such as</p><ul class="postList"><li name="b34f" id="b34f" class="graf graf--li graf-after--p"><a href="https://github.com/wfrest/wfrest" data-href="https://github.com/wfrest/wfrest" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Wfrest</strong></a> : Micro-framework, built on Workflow (recommended)</li><li name="f96e" id="f96e" class="graf graf--li graf-after--li"><a href="https://github.com/CrowCpp/Crow" data-href="https://github.com/CrowCpp/Crow" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Crow</strong></a> : Minimalist, inspired by Flask in Python</li><li name="b901" id="b901" class="graf graf--li graf-after--li"><a href="https://github.com/oatpp/oatpp" data-href="https://github.com/oatpp/oatpp" class="markup--anchor markup--li-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--li-strong">Oat++</strong></a> : Modular, Zero-dependency, Modern</li></ul>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/develop-high-performance-microservices-with-c-4dafbe0e7e39" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="the-hidden-devil-of-aws-nat-gateway-how-to-save-90-on-network.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">The Hidden Devil of AWS NAT Gateway : How to Save 90% on Network Costs</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="hidden-devil-of-node-js-console-log.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Hidden devil of Node.js : console.log</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

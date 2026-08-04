@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>From Monolith to Microservices Using Tactical Forking · Mohit Malhotra</title>
+  <meta name="description" content="How to use tactical forking to migrate a modular monoliths system to microservices architecture" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/from-monolith-to-microservices-using-tactical-forking-afdfb6aa0a3f" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="From Monolith to Microservices Using Tactical Forking" />
+  <meta property="og:description" content="How to use tactical forking to migrate a modular monoliths system to microservices architecture" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span></div>
+      <h1 class="article__title">From Monolith to Microservices Using Tactical Forking</h1>
+      <p class="article__subtitle">How to use tactical forking to migrate a modular monoliths system to microservices architecture</p>
+      <div class="article__meta">
+        <span>Oct 23, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="f687" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="ecc8" id="ecc8" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*xBD6f1tenoTTZs3Z" data-width="5355" data-height="4016" src="../assets/blog/from-monolith-to-microservices-using-tactical-forking/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@austindistel?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@austindistel?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Austin Distel</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="65f7" id="65f7" class="graf graf--p graf-after--figure graf--trailing">In the fast-paced world of software development, adaptability and scalability are key to staying competitive. If you’re working with a modular monolithic system, you might be feeling the strain of its limitations. But fear not, for there’s a strategy that can help you break free from the confines of your monolith while maintaining your sanity, tactical forking. In this article, we’ll explore how to use tactical forking to migrate from a modular monolith to a microservices architecture, in a way that’s both comprehensible and actionable.</p></div></div></section><section name="c617" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3200" id="3200" class="graf graf--h3 graf--leading">Understanding the Problem</h3><p name="0d47" id="0d47" class="graf graf--p graf-after--h3">Before we dive into the nitty-gritty details of tactical forking, let’s take a moment to understand the challenges associated with modular monoliths and why microservices might be a better fit.</p><h4 name="13a2" id="13a2" class="graf graf--h4 graf-after--p">The Modular Monolith Predicament</h4><p name="5b47" id="5b47" class="graf graf--p graf-after--h4">Modular monoliths are designed to be organized into logical modules, making it easier to manage code. However, they can quickly become complex, difficult to scale, and inflexible. As your application grows, so does the complexity, making it challenging to maintain and deploy new features without affecting the entire system.</p><p name="1966" id="1966" class="graf graf--p graf-after--p graf--trailing">Microservices architecture offers a way out of this. By breaking down your monolith into smaller, independent services, you gain the ability to scale, update, and deploy parts of your application without disrupting the whole. But migrating an entire monolith to microservices can be daunting. That’s where tactical forking comes into play.</p></div></div></section><section name="37c8" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="135f" id="135f" class="graf graf--h3 graf--leading">What is Tactical Forking?</h3><p name="a2d1" id="a2d1" class="graf graf--p graf-after--h3 graf--trailing">Tactical forking is a structured approach to migration that involves creating a new version of your application, or “fork,” while maintaining the existing modular monolith. This fork serves as the foundation for building microservices incrementally, without the need for a massive rewrite. <em class="markup--em markup--p-em">Point to note is that tactical forking works only with modular monolith</em>.</p></div></div></section><section name="ae3c" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="5b29" id="5b29" class="graf graf--h3 graf--leading">How Does Tactical Forking Work?</h3><p name="6cf4" id="6cf4" class="graf graf--p graf-after--h3">Now that we’ve covered the why let’s delve into the how. Tactical forking involves a series of well-defined steps, each with its own set of technical details:</p><h4 name="5eb1" id="5eb1" class="graf graf--h4 graf-after--p">Identify and Decouple Modules</h4><p name="c493" id="c493" class="graf graf--p graf-after--h4">The first step in tactical forking is identifying and decoupling the modules within your monolith. This involves understanding the dependencies between modules and separating them as much as possible. Use code analysis tools to identify module boundaries, refactor code to minimise inter-module dependencies, and implement clear APIs for communication between modules.</p><p name="4bcf" id="4bcf" class="graf graf--p graf-after--p">Each module in future will be deployed a separate microservice which might have its own separate database. Hence, a good data modeling strategy is required to split the existing monolith database schema into different databases in as normalised form as possible.</p><figure name="cb80" id="cb80" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*DJ8T15iMvM507gL-i6DGOg.png" data-width="621" data-height="467" src="../assets/blog/from-monolith-to-microservices-using-tactical-forking/img-02.png"><figcaption class="imageCaption">Initial monolith</figcaption></figure><h4 name="a9b8" id="a9b8" class="graf graf--h4 graf-after--figure">Create a Fork</h4><p name="00aa" id="00aa" class="graf graf--p graf-after--h4">Once you’ve isolated modules, create a fork of your monolith. This fork will serve as the basis for your microservices migration. Set up a separate code repository for the fork, ensuring that the forked codebase can run independently and implementing version control to manage the forked codebase.</p><h4 name="11a8" id="11a8" class="graf graf--h4 graf-after--p">Gradual Microservices Implementation</h4><p name="5b25" id="5b25" class="graf graf--p graf-after--h4">Now comes the exciting part, introducing microservices to your forked application. Identify a module suitable for microservices migration, extract the module into a separate service, and implement necessary infrastructure like containerization and orchestration. Set up API gateways for communication between services. Now use something called a glue code to abstract the calls to this extracted service API in your monolith. This glue code will hide the migration from a module to module call to a API call.</p><p name="90b7" id="90b7" class="graf graf--p graf-after--p">Use the new data modelling strategy to split the data existing database into separate databases for each microservice as per requirement (it can be the most challenging task).</p><figure name="9df2" id="9df2" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*w4RD5q4h7bU4buojc6kwgg.png" data-width="581" data-height="751" src="../assets/blog/from-monolith-to-microservices-using-tactical-forking/img-03.png"><figcaption class="imageCaption">After forking and deploying inventory service</figcaption></figure><h4 name="621a" id="621a" class="graf graf--h4 graf-after--figure">Testing and Monitoring</h4><p name="fe08" id="fe08" class="graf graf--p graf-after--h4">Thorough testing and monitoring are crucial to ensure the reliability and performance of your microservices. Implement automated testing for microservices, set up logging and monitoring solutions (e.g., ELK stack, Prometheus), and monitor performance and gather feedback.</p><h4 name="a4fb" id="a4fb" class="graf graf--h4 graf-after--p">Rinse and Repeat</h4><p name="b8d2" id="b8d2" class="graf graf--p graf-after--h4">Continue the process of modularizing and migrating modules one by one until you’ve achieved your desired microservices architecture. Iterate through last 2 steps for each module, regularly assess the overall system’s performance and reliability, and refine your microservices strategy based on feedback and lessons learned.</p><figure name="335e" id="335e" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*MSsMfpOs1crkuUR564gMLg.png" data-width="581" data-height="771" src="../assets/blog/from-monolith-to-microservices-using-tactical-forking/img-04.png"><figcaption class="imageCaption">Partial migration from monolith to microservices</figcaption></figure></div></div></section><section name="f062" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8a5d" id="8a5d" class="graf graf--h3 graf--leading">Benefits &amp; Limitations</h3><h4 name="cdc6" id="cdc6" class="graf graf--h4 graf-after--h3">Benefits</h4><ol class="postList"><li name="f223" id="f223" class="graf graf--li graf-after--h4"><strong class="markup--strong markup--li-strong">Risk Mitigation </strong>: You don’t have to put all your eggs in one basket. You can gradually migrate functionality, reducing the risk of disrupting your existing system.</li><li name="69ec" id="69ec" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Continuous Delivery</strong> : You can start deploying microservices as soon as they’re ready, improving your development and release cycle.</li><li name="f0fd" id="f0fd" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Testing Ground </strong>: The forked version acts as a playground for experimenting with microservices without affecting production.</li></ol><h4 name="082e" id="082e" class="graf graf--h4 graf-after--li">Limitations</h4><ol class="postList"><li name="5285" id="5285" class="graf graf--li graf-after--h4"><strong class="markup--strong markup--li-strong">Redundancy : </strong>You will end up having a lot of duplicated code implementation in the initial stages because migrating some parts of module completely might not be possible.</li><li name="04ca" id="04ca" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Remodelling data strategy : </strong>You might need to remodel the data strategy completely so that data can survive the forking and splitting stage.</li><li name="bd38" id="bd38" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Tedious knowledge transfer</strong> : Different teams should have thorough knowledge about the complete monolithic system before starting tactical forking so that they can operate on their fork separately.</li><li name="489a" id="489a" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Performance Overhead :</strong> Overhead of containerization and service orchestration can impact the performance of system.</li><li name="3845" id="3845" class="graf graf--li graf-after--li graf--trailing"><strong class="markup--strong markup--li-strong">Potential over-engineering :</strong> In some cases, you may be tempted to over-engineer the microservices architecture, adding unnecessary complexity</li></ol></div></div></section><section name="d629" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="6395" id="6395" class="graf graf--h3 graf--leading">Conclusion</h3><p name="272e" id="272e" class="graf graf--p graf-after--h3">Tactical forking is a pragmatic approach to migrating from a modular monolith to a microservices architecture. By following these steps and paying attention to the technical details, you can gradually transform your monolithic system into a nimble and scalable microservices ecosystem.</p><blockquote name="138c" id="138c" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Rome wasn’t built in a day, and neither is a microservices architecture. Take it one module at a time during tactical forking, and you’ll soon reap the benefits of a more flexible and scalable software system. “</blockquote><p name="a780" id="a780" class="graf graf--p graf-after--pullquote">Happy forking!</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/from-monolith-to-microservices-using-tactical-forking-afdfb6aa0a3f" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="circuit-breakers-in-microservices.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Circuit breakers in Microservices</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="5-cloud-architecture-patterns-you-should-know.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">5 Cloud Architecture Patterns You Should Know</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

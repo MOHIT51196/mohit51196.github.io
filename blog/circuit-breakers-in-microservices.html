@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circuit breakers in Microservices · Mohit Malhotra</title>
+  <meta name="description" content="Approach to prevent cascaded failure in microservices" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/circuit-breakers-in-microservices-d1c3d4fee5e3" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Circuit breakers in Microservices" />
+  <meta property="og:description" content="Approach to prevent cascaded failure in microservices" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span></div>
+      <h1 class="article__title">Circuit breakers in Microservices</h1>
+      <p class="article__subtitle">Approach to prevent cascaded failure in microservices</p>
+      <div class="article__meta">
+        <span>Dec 4, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>6 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="1c37" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="8b73" id="8b73" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*VaSvwvGeQtafJfVJ" data-width="3865" data-height="2257" src="../assets/blog/circuit-breakers-in-microservices/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@sigmund?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@sigmund?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Sigmund</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="fa15" id="fa15" class="graf graf--p graf-after--figure">As microservices architecture is all about having collection of multiple micro sized separately deployable services which co-ordinate together to comprise as software system. Splitting the system is into individual services is still the easier part but managing co-ordination is hell of a job.</p><p name="d57c" id="d57c" class="graf graf--p graf-after--p">For a resilient and highly available system, handling failures in these services gracefully without impacting the whole system is a necessity.</p><h3 name="040f" id="040f" class="graf graf--h3 graf-after--p">What is the problem ?</h3><p name="13f5" id="13f5" class="graf graf--p graf-after--h3">Assume an <strong class="markup--strong markup--p-strong">orders service</strong> handles request from the user placing a new order. The user tries to make the payment and <strong class="markup--strong markup--p-strong">orders service</strong> communicates with <strong class="markup--strong markup--p-strong">payment service </strong>to check the status before confirming the order. Now <strong class="markup--strong markup--p-strong">payment service</strong> goes down due to lack of resources such as cpu or memory. Ideally <strong class="markup--strong markup--p-strong">order services</strong> must be running with multiple threads (or async requests) which are trying to invoke the <strong class="markup--strong markup--p-strong">payment service </strong>APIs. These <strong class="markup--strong markup--p-strong">payment service</strong> APIs takes too long to respond and hence more and more orders get stuck waiting for response and eventually it will lead to failures in <strong class="markup--strong markup--p-strong">order service</strong>.</p><figure name="e681" id="e681" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*kO8er7BBdkvgyU7xGMwHRQ.jpeg" data-width="625" data-height="500" src="../assets/blog/circuit-breakers-in-microservices/img-02.jpg"><figcaption class="imageCaption">Meme from <a href="http://www.quickmeme.com" data-href="http://www.quickmeme.com" class="markup--anchor markup--figure-anchor" rel="nofollow noopener noopener" target="_blank">http://www.quickmeme.com</a></figcaption></figure><p name="f3cf" id="f3cf" class="graf graf--p graf-after--figure graf--trailing">This is classic example of <em class="markup--em markup--p-em">cascading failures</em> where the failure in payment service propagates to order service and assume it as complex system where services co-ordinate with each other, uch failure will propagates to other services as well. Its hard to believe but if such cascading failures are not taken care of , it can result in whole system going down.</p></div></div></section><section name="29c5" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="d24b" id="d24b" class="graf graf--h3 graf--leading">Can’t you handle exceptions ?</h3><p name="4574" id="4574" class="graf graf--p graf-after--h3">Before talking about the solution to this cascaded failure, understand that the root cause of the issue the dependency of <strong class="markup--strong markup--p-strong">order service</strong> on the <strong class="markup--strong markup--p-strong">payments service</strong>. Generally success and failures from other services (here <strong class="markup--strong markup--p-strong">payment service</strong>) are handled with a simple try catch or some other exception handler but cases like slow responses and network failures are ignored assuming its low probability which lead to such situation.</p><p name="c6ac" id="c6ac" class="graf graf--p graf-after--p">It clearly shows that a braking mechanism is required between the caller service (like <strong class="markup--strong markup--p-strong">order service</strong>) and the callee service (like <strong class="markup--strong markup--p-strong">payment service</strong>). Assuming the whole system like complex circuitry, the braking mechanism (actually a design pattern) which I am going to discuss about is called Circuit Breaker pattern.</p><figure name="bed1" id="bed1" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*8UjiMaX5uWg3UlrB6JE0tQ.jpeg" data-width="512" data-height="288" src="../assets/blog/circuit-breakers-in-microservices/img-03.jpg"><figcaption class="imageCaption">Meme from <a href="http://www.quickmeme.com" data-href="http://www.quickmeme.com" class="markup--anchor markup--figure-anchor" rel="nofollow noopener" target="_blank">http://www.quickmeme.com</a></figcaption></figure></div></div></section><section name="3311" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4e50" id="4e50" class="graf graf--h3 graf--leading">What is Circuit Breaker Pattern ?</h3><p name="7877" id="7877" class="graf graf--p graf-after--h3">Circuit breaker pattern is a sustainable design patterns designed to prevent cascading failures in Microservices. In an analogy, this pattern works like a MCB (Miniature Circuit Breaker) in your house. Circuit breakers kick in when a caller service face slow or no responses from the callee service due to failures or network issues.</p><p name="f15a" id="f15a" class="graf graf--p graf-after--p">Circuit Breaker pattern operates in three states: open, closed, and half-open, each serving a specific purpose in managing service or resource failures:</p><figure name="9581" id="9581" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*FRc6QmPN7P2Ie_fl_TAtHQ.jpeg" data-width="2296" data-height="1423" src="../assets/blog/circuit-breakers-in-microservices/img-04.jpg"><figcaption class="imageCaption">State diagram of circuit breaker pattern</figcaption></figure><h4 name="9fef" id="9fef" class="graf graf--h4 graf-after--figure"><strong class="markup--strong markup--h4-strong">Closed State</strong></h4><p name="0058" id="0058" class="graf graf--p graf-after--h4">Circuit breaker allows normal requests to pass through. It monitors the responses from the service or resource for errors or failures. If the error rate remains below a predefined threshold limit, the circuit breaker remains in the closed state, allowing all requests to go through without interruption. This state ensures that the application functions as usual under normal conditions.</p><h4 name="5c0b" id="5c0b" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">Open State</strong></h4><p name="d567" id="d567" class="graf graf--p graf-after--h4">When the circuit breaker detects that the error rate has exceeded the predefined threshold, it transitions to the open state. In this state, the circuit breaker blocks any further requests from being sent to the failing service or resource. This prevents overloading the resource and allows it time to recover. During the open state, the circuit breaker can be configured to perform actions like returning predefined error responses or directing traffic to a backup service.</p><h4 name="7f1b" id="7f1b" class="graf graf--h4 graf-after--p"><strong class="markup--strong markup--h4-strong">Half-Open State</strong></h4><p name="6a3f" id="6a3f" class="graf graf--p graf-after--h4">After a certain period or when specific conditions are met, the circuit breaker transitions from the open state to the half-open state. In this state, the circuit breaker allows a limited number of test requests to pass through to the service or resource to check if it has recovered. If these test requests are successful and indicate that the resource is now stable, the circuit breaker transitions back to the closed state, resuming normal operations. However, if the test requests continue to fail, the circuit breaker remains in the open state, preventing further requests until the resource is fully recovered.</p><p name="09b0" id="09b0" class="graf graf--p graf-after--p graf--trailing">These states provide a dynamic and adaptive mechanism for managing the availability and resilience of services or resources in cloud-based systems, ensuring that they can gracefully handle failures while maintaining overall system reliability.</p></div></div></section><section name="74a2" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4f54" id="4f54" class="graf graf--h3 graf--leading">Terminology &amp; Implementation</h3><p name="ebdc" id="ebdc" class="graf graf--p graf-after--h3">Circuit breakers can be implemented using famous libraries like <a href="https://github.com/Netflix/Hystrix" data-href="https://github.com/Netflix/Hystrix" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Hystrix by Netflix</a> or <a href="https://github.com/resilience4j/resilience4j" data-href="https://github.com/resilience4j/resilience4j" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank">Resilence4j</a>. And my personal favourite is Resilence4j.</p><p name="f340" id="f340" class="graf graf--p graf-after--p">Following are terminologies used by these libraries while configuring circuit breakers</p><ul class="postList"><li name="5dd3" id="5dd3" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Circuit breaker is enabled : </strong>status<strong class="markup--strong markup--li-strong"> </strong>if<strong class="markup--strong markup--li-strong"> </strong>circuit breaker is enabled or not.</li><li name="bb4d" id="bb4d" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Minimum number of calls </strong>: min number of call before calculating the failure threshold of circuit breaker.</li><li name="2f77" id="2f77" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Failure threshold limit : </strong>threshold limit in percentage or count after which circuit should move to open state.</li><li name="e9e2" id="e9e2" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Wait time in open state : </strong>time for which circuit should wait before moving from open to half open state.</li><li name="80f8" id="80f8" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Auto transition from open to half open state : </strong>whether circuit should move from open to half open state automatically or need a call to trigger it.</li></ul><p name="46a4" id="46a4" class="graf graf--p graf-after--li">Following are some configuration details in Hystrix and Resilence4j which you can see for understanding</p><figure name="6c8a" id="6c8a" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*hfUpQO1MeQhAHKS3tpFIUw.png" data-width="1240" data-height="350" src="../assets/blog/circuit-breakers-in-microservices/img-05.png"><figcaption class="imageCaption">Hystrix circuit breaker configuration</figcaption></figure><figure name="a5a4" id="a5a4" class="graf graf--figure graf-after--figure"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*nhj8tzhXfDNq-S3JY22cOg.png" data-width="1360" data-height="1528" src="../assets/blog/circuit-breakers-in-microservices/img-06.png"><figcaption class="imageCaption">Resilence4j circuit breaker configuration</figcaption></figure><p name="86c5" id="86c5" class="graf graf--p graf-after--figure"><strong class="markup--strong markup--p-strong">I will not stretch the article by showing you redundant implementation code of these libraries which you can find in thousands of articles and library documentation. But after reading this article you will be good to go while implementing such libraries in your code base.</strong></p><p name="5586" id="5586" class="graf graf--p graf-after--p graf--trailing"><em class="markup--em markup--p-em">Tip : Circuit breaker states can also be monitored if required either by using simple logging or by creating some sort of grafana charts to show metrics like failure count, success to failure ratio etc. These circuit breaker metrics of caller service can be compared with callee service health probe metrics to figure out the root cause of failure whenever required.</em></p></div></div></section><section name="5219" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="f504" id="f504" class="graf graf--h3 graf--leading">Limitations of this pattern</h3><ul class="postList"><li name="f177" id="f177" class="graf graf--li graf-after--h3">Circuits are difficult to do as a one-off. They require an infrastructure management technology such as a service mesh that can manage the switching on and off.</li><li name="731a" id="731a" class="graf graf--li graf-after--li graf--trailing">Testing with circuit breaker in action is difficult as state changes are difficult to track.</li></ul></div></div></section><section name="1570" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4c84" id="4c84" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong">Conclusion</strong></h3><p name="7e27" id="7e27" class="graf graf--p graf-after--h3">Circuit breakers should be used in services that are heavily dependent on the responses from other services. Eliminating the failures completely is not possible in case of microservices but minimising failures to 99% and handling the 1% gracefully should be the goal.</p><blockquote name="784e" id="784e" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Microservices are double edged swords, if you do not place necessary protections in the right place, a small spark in the system can lead to a complete breakdown. Circuit breakers are one such protection mechanism to avoid cascaded failures“</blockquote><p name="7dcf" id="7dcf" class="graf graf--p graf-after--pullquote"><strong class="markup--strong markup--p-strong">Don’t forget to follow me on Medium for more such content and give a clap if you like it.</strong></p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/circuit-breakers-in-microservices-d1c3d4fee5e3" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="how-nodejs-actually-works.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">How Nodejs Actually Works</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="from-monolith-to-microservices-using-tactical-forking.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">From Monolith to Microservices Using Tactical Forking</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

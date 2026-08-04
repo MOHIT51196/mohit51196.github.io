@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting started with Azure IoT · Mohit Malhotra</title>
+  <meta name="description" content="Detailed discussion about basic concepts of Microsoft Azure IoT" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/getting-started-with-azure-iot-b591bd0ee6fe" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Getting started with Azure IoT" />
+  <meta property="og:description" content="Detailed discussion about basic concepts of Microsoft Azure IoT" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Cloud</span></div>
+      <h1 class="article__title">Getting started with Azure IoT</h1>
+      <p class="article__subtitle">Detailed discussion about basic concepts of Microsoft Azure IoT</p>
+      <div class="article__meta">
+        <span>Mar 9, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="77a8" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="38b0" id="38b0" class="graf graf--p graf-after--h4">Internet of Things (IoT) is in lime light from last one decade and is not something very new but yet it sounds enticing even today. Even if you are aware of IoT, implementing it as an enterprise level solution is a different game all together. Hence the tech giants like Google, Amazon and Microsoft has provided their PaaS (Platform as a Service) for IoT usecases. This article focuses on the Azure IoT platform developed by Microsoft.</p><figure name="49ed" id="49ed" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*wdE9zWdLaporTZk3" data-width="6000" data-height="4000" src="../assets/blog/getting-started-with-azure-iot/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@jorgedevs?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@jorgedevs?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Jorge Ramirez</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="8edf" id="8edf" class="graf graf--p graf-after--figure">Azure IoT platform provides everything an organisation needs to implement enterprise level IoT solution considering factors like security, scalability and availability etc. Azure IoT platform revolves around few key concepts such as</p><ul class="postList"><li name="6950" id="6950" class="graf graf--li graf-after--p">IoT Hub</li><li name="920a" id="920a" class="graf graf--li graf-after--li">Device Provisioning Service</li><li name="86af" id="86af" class="graf graf--li graf-after--li">Device communication</li><li name="2a6f" id="2a6f" class="graf graf--li graf-after--li graf--trailing">IoT Events</li></ul></div></div></section><section name="84c9" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3098" id="3098" class="graf graf--h3 graf--leading">IoT Hub</h3><p name="524f" id="524f" class="graf graf--p graf-after--h3">IoT Hub can be considered as the central system to which all the IoT devices and cloud services connects with in order to communication to each other. Cloud services can send requests or commands to interact with devices via IoT Hub. IoT Hub facilitate different ways of communication with device.</p><p name="bea4" id="bea4" class="graf graf--p graf-after--p">Device can be linked (registered) to IoT Hub in two ways</p><ol class="postList"><li name="430a" id="430a" class="graf graf--li graf-after--p">Create a device from portal on the IoT Hub</li><li name="d750" id="d750" class="graf graf--li graf-after--li">Enrolling via Device provisioning service</li></ol><h3 name="11a5" id="11a5" class="graf graf--h3 graf-after--li">Device Provisioning Service</h3><p name="c29c" id="c29c" class="graf graf--p graf-after--h3">Device provisioning service as name suggests, handles the provisioning of IoT device on one or more IoT Hubs. DPS is used when you want to enroll devices on a scale. DPS helps you to create enrolment groups on which a configurations can be setup like initial device twin state (we will discuss it soon) and assigning one or more IoT Hubs etc. This enrolment group can be used to registering multiple device at scale. A certificate needs to be present on the device while enrolling via DPS.</p><p name="0537" id="0537" class="graf graf--p graf-after--p">Device can be provisioned via DPS using two ways of authentication</p><ul class="postList"><li name="bfe0" id="bfe0" class="graf graf--li graf-after--p">CA Certificates</li><li name="5c85" id="5c85" class="graf graf--li graf-after--li">Self signed certificates</li></ul><p name="9318" id="9318" class="graf graf--p graf-after--li"><em class="markup--em markup--p-em">Incase a device is getting registering on DPS using CA certificates then device should have a leaf certificate and its root/intermediate certificate should be upload on DPS beforehand.</em></p><h3 name="7c91" id="7c91" class="graf graf--h3 graf-after--p">Device Communication</h3><p name="7e00" id="7e00" class="graf graf--p graf-after--h3">Azure IoT platform enable you to interaction with an IoT enabled device. This interaction can be the exchange of data or functionality. Lets discuss what are available options for communicating with IoT device programmatically.</p><h4 name="b69e" id="b69e" class="graf graf--h4 graf-after--p">Device twin state</h4><p name="b2b5" id="b2b5" class="graf graf--p graf-after--h4">JSON object which represents device current state / configuration. This object comprises of 2 nested objects as follows</p><ul class="postList"><li name="1f94" id="1f94" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Reported properties</strong> : object can be modified by the device only and is used by device to respond to the cloud services (using Azure IoT service SDK).</li><li name="3fd9" id="3fd9" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Desired properties</strong> : object can be modified by cloud services (using Azure IoT service SDK) and is used to command the IoT device.</li></ul><h4 name="06e5" id="06e5" class="graf graf--h4 graf-after--li">D2C / C2D messaging</h4><p name="a088" id="a088" class="graf graf--p graf-after--h4">D2C and C2D messaging is a device to cloud and cloud to device messaging respectively. D2C messages are used for telemetry purposes by the device and can be used for high frequency messaging. C2D messages are available for similar purpose for backend service using Azure IoT service SDK.</p><h4 name="9d07" id="9d07" class="graf graf--h4 graf-after--p">Direct method</h4><p name="e226" id="e226" class="graf graf--p graf-after--h4">Direct methods can be understood as an analogy to remote procedure calls. A cloud service can invoke a function using a name and its arguments which can trigger a callback on the device end. As soon as device receive this direct method call , it can internally invoke a particular function with respect to the function name.</p><h4 name="3e11" id="3e11" class="graf graf--h4 graf-after--p">File upload</h4><p name="0685" id="0685" class="graf graf--p graf-after--h4">A storage account can be linked with every IoT hub. These storage account contains a storage container which can be used to store different sort of data. File upload is feature which can be used by the IoT device to upload files to the IoT hub linked storage container.</p><h4 name="33ae" id="33ae" class="graf graf--h4 graf-after--p">Device streams</h4><p name="d2bd" id="d2bd" class="graf graf--p graf-after--h4">Azure IoT Hub device streams facilitate the creation of secure bi-directional TCP tunnels for a variety of cloud-to-device communication scenario. IoT hub’s main endpoint orchestrates the creation of a device stream, the streaming endpoint handles the traffic that flows between the service and device.</p><p name="3e19" id="3e19" class="graf graf--p graf-after--p graf--trailing"><em class="markup--em markup--p-em">Device streams are currently under public preview phase in the Azure IoT SDK.</em></p></div></div></section><section name="ab0a" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8eca" id="8eca" class="graf graf--h3 graf--leading">IoT Events</h3><p name="b2a3" id="b2a3" class="graf graf--p graf-after--h3">Throughout the IoT device lifecycle, multiple events are emitted within the Azure platform which can consumed for multiple purposes such as triggering some functionality or logging device state. These events can be of the following types</p><ul class="postList"><li name="816e" id="816e" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Microsoft.Devices.DeviceCreated</strong> : Published when a device is registered to an IoT hub.</li><li name="6668" id="6668" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Microsoft.Devices.DeviceDeleted</strong> : Published when a device is deleted from an IoT hub.</li><li name="694b" id="694b" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Microsoft.Devices.DeviceConnected</strong> : Published when a device is connected to an IoT hub.</li><li name="4849" id="4849" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Microsoft.Devices.DeviceDisconnected</strong> : Published when a device is disconnected from an IoT hub.</li><li name="5f20" id="5f20" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Microsoft.Devices.DeviceTelemetry</strong> : Published when a device telemetry message is sent to an IoT hub</li></ul><p name="ffae" id="ffae" class="graf graf--p graf-after--li graf--trailing">These events can be routed to different resources like Azure functions, Azure event grid and Azure event hub.</p></div></div></section><section name="d847" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="3a97" id="3a97" class="graf graf--h3 graf--leading">Conclusion</h3><p name="317c" id="317c" class="graf graf--p graf-after--h3">Microsoft Azure platform provides multiple IoT tools to cater variety of use cases. Similar solutions are provided by AWS and Google as well. These tools can be used to develop enterprise level IoT solutions which are high performant, scalable and highly available.</p><blockquote name="4da3" id="4da3" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--p">“ Third party managed IoT services can be used by an organisation to make the products IoT enabled. These managed services can save a lot of effort, cost and time for even a mature organisation while achieving there goal to be IoT enabled. “</blockquote>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/getting-started-with-azure-iot-b591bd0ee6fe" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="why-grpc-is-the-future-of-software-architecture.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Why gRPC is the future of software architecture</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="5-common-mistakes-in-developing-a-tech-product.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">5 Common mistakes in developing a tech product</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Hidden Power of Adonis.js · Mohit Malhotra</title>
+  <meta name="description" content="Everything You Need From a Node.js Framework" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/the-hidden-power-of-adonis-js-701df8d8b071" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="The Hidden Power of Adonis.js" />
+  <meta property="og:description" content="Everything You Need From a Node.js Framework" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Node.js</span></div>
+      <h1 class="article__title">The Hidden Power of Adonis.js</h1>
+      <p class="article__subtitle">Everything You Need From a Node.js Framework</p>
+      <div class="article__meta">
+        <span>Mar 19, 2026</span>
+        <span aria-hidden="true">·</span>
+        <span>3 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="9e55" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="cc58" id="cc58" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*Be04kBZkJBn4Iqc-2xGhvw.jpeg" data-width="2816" data-height="1536" src="../assets/blog/the-hidden-power-of-adonis-js/img-01.jpg"><figcaption class="imageCaption">Welcome to Adonis.js</figcaption></figure><p name="7918" id="7918" class="graf graf--p graf-after--figure">Thinking Express.js or Fastify are the only ways to build Node.js applications? Think again, the endless cycle of configuring routing, choosing an ORM, and setting up authentication can drain productivity in ways never imagined.</p><p name="f2a8" id="f2a8" class="graf graf--p graf-after--p graf--trailing">This fragmented ecosystem is probably the most accepted reality by JavaScript developers across the globe, yet you won’t find such chaotic setups in the production codebases of mature teams using true structural frameworks. If you have ever wondered why scaling Node.js feels like reinventing the wheel, then this article is for you.</p></div></div></section><section name="48a5" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="85ae" id="85ae" class="graf graf--h3 graf--leading">Why Choose Adonis.js ?</h3><p name="458c" id="458c" class="graf graf--p graf-after--h3">Most developers default to minimal frameworks, assuming they need to build their architecture from scratch. But what if a framework could handle the heavy lifting just as well, without the integration nightmares, incompatible packages, or hidden costs?</p><p name="809b" id="809b" class="graf graf--p graf-after--p">Adonis.js comes with built-in robust tooling, offering a strictly typed, full-stack MVC experience directly within the Node.js runtime.</p><p name="d6a3" id="d6a3" class="graf graf--p graf-after--p">Minimalist frameworks are great, but they come with the following downsides:</p><ul class="postList"><li name="c23b" id="c23b" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Endless Decision Fatigue:</strong> Choosing the right libraries for auth, validation, and database access is exhausting.</li><li name="f4b1" id="f4b1" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Maintenance Hell:</strong> Keeping third-party packages in sync is a hassle.</li><li name="05d8" id="05d8" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Inconsistent Structure:</strong> Every developer writes and structures code differently.</li></ul><p name="7e88" id="7e88" class="graf graf--p graf-after--li">Adonis.js, on the other hand:</p><ul class="postList"><li name="91d9" id="91d9" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Works Out of the Box:</strong> Routing, controllers, and Lucid ORM are pre-configured.</li><li name="dfeb" id="dfeb" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">TypeScript First:</strong> Keeps type safety consistent without external syncing or patchy <code class="markup--code markup--li-code">.d.ts</code> files.</li><li name="87ca" id="87ca" class="graf graf--li graf-after--li graf--trailing"><strong class="markup--strong markup--li-strong">Comes with Ace CLI:</strong> Automates generating boilerplate code instantly.</li></ul></div></div></section><section name="fb64" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="425d" id="425d" class="graf graf--h3 graf--leading">Getting the Maximum Out of Adonis.js</h3><p name="8edc" id="8edc" class="graf graf--p graf-after--h3">Whether you are fully committing to a commercial project or simply opting in and treating your adoption as a long-term “subscription” to the Adonis.js ecosystem, using it like a pro requires leveraging its built-in modules effectively.</p><figure name="62a3" id="62a3" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*FagCbKAL6cUiTyE-p63sig.jpeg" data-width="1536" data-height="1024" src="../assets/blog/the-hidden-power-of-adonis-js/img-02.jpg"><figcaption class="imageCaption">Tools in Adonis.js</figcaption></figure><h4 name="2449" id="2449" class="graf graf--h4 graf-after--figure">Master the Lucid ORM</h4><p name="7686" id="7686" class="graf graf--p graf-after--h4">Lucid is the active record ORM shipped with Adonis.js. Instead of writing raw SQL or dealing with clunky third-party ORMs, Lucid provides an elegant API to interact with the database.</p><p name="201b" id="201b" class="graf graf--p graf-after--p">Here is a quick example of defining a model and fetching related data</p><pre data-code-block-mode="1" spellcheck="false" data-code-block-lang="typescript" name="4c2b" id="4c2b" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">import</span> { <span class="hljs-title class_">BaseModel</span>, column, hasMany } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@adonisjs/lucid/orm&#x27;</span><br /><span class="hljs-keyword">import</span> <span class="hljs-keyword">type</span> { <span class="hljs-title class_">HasMany</span> } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@adonisjs/lucid/types/relations&#x27;</span><br /><span class="hljs-keyword">import</span> <span class="hljs-title class_">Post</span> <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;#models/post&#x27;</span><br /><br /><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_ inherited__">BaseModel</span> {<br />  <span class="hljs-meta">@column</span>({ <span class="hljs-attr">isPrimary</span>: <span class="hljs-literal">true</span> })<br />  <span class="hljs-keyword">declare</span> <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span><br /><br />  <span class="hljs-meta">@column</span>()<br />  <span class="hljs-keyword">declare</span> <span class="hljs-attr">username</span>: <span class="hljs-built_in">string</span><br /><br />  <span class="hljs-meta">@hasMany</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title class_">Post</span>)<br />  <span class="hljs-keyword">declare</span> <span class="hljs-attr">posts</span>: <span class="hljs-title class_">HasMany</span>&lt;<span class="hljs-keyword">typeof</span> <span class="hljs-title class_">Post</span>&gt;<br />}</span></pre><p name="1757" id="1757" class="graf graf--p graf-after--pre">Fetching a user with their posts becomes completely seamless:</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="typescript" name="8560" id="8560" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> <span class="hljs-title class_">User</span>.<span class="hljs-title function_">query</span>().<span class="hljs-title function_">preload</span>(<span class="hljs-string">&#x27;posts&#x27;</span>).<span class="hljs-title function_">firstOrFail</span>()ty</span></pre><h4 name="5d76" id="5d76" class="graf graf--h4 graf-after--pre">Leverage Ace CLI for Speed</h4><p name="ade7" id="ade7" class="graf graf--p graf-after--h4">Never create files manually again. The Ace CLI is the ultimate productivity booster. Run simple commands to scaffold controllers, models, and migrations.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="bash" name="3c3c" id="3c3c" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content">node ace make:controller User<br />node ace make:model User -m</span></pre><p name="462c" id="462c" class="graf graf--p graf-after--pre">This single command generates the model and the migration file, keeping the workspace clean and strictly adhering to the framework’s architecture.</p><h4 name="e9f2" id="e9f2" class="graf graf--h4 graf-after--p">Route Grouping and Middleware</h4><p name="a436" id="a436" class="graf graf--p graf-after--h4">Handling complex routing is notoriously difficult in minimal setups. Adonis.js simplifies this with intuitive route grouping and middleware attachments.</p><pre data-code-block-mode="2" spellcheck="false" data-code-block-lang="typescript" name="2c12" id="2c12" class="graf graf--pre graf-after--p graf--preV2"><span class="pre--content"><span class="hljs-keyword">import</span> router <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@adonisjs/core/services/router&#x27;</span><br /><span class="hljs-keyword">import</span> { middleware } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;#start/kernel&#x27;</span><br /><br />router.<span class="hljs-title function_">group</span>(<span class="hljs-function">() =&gt;</span> {<br />  router.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;/profile&#x27;</span>, <span class="hljs-string">&#x27;#controllers/users_controller.profile&#x27;</span>)<br />  router.<span class="hljs-title function_">post</span>(<span class="hljs-string">&#x27;/settings&#x27;</span>, <span class="hljs-string">&#x27;#controllers/users_controller.update&#x27;</span>)<br />}).<span class="hljs-title function_">use</span>(middleware.<span class="hljs-title function_">auth</span>())</span></pre><p name="6f39" id="6f39" class="graf graf--p graf-after--pre">This guarantees that all routes within the group are protected by the authentication middleware natively, without writing custom token validation logic.</p><blockquote name="161a" id="161a" class="graf graf--blockquote graf-after--p graf--trailing"><em class="markup--em markup--blockquote-em">Adonis.js has many more enterprise features like this which can help you maintain codebase better and also provide quality of life features for a developer. Explore them on the official well written documentation at </em><a href="https://docs.adonisjs.com/introduction" data-href="https://docs.adonisjs.com/introduction" class="markup--anchor markup--blockquote-anchor" rel="noopener" target="_blank"><em class="markup--em markup--blockquote-em">https://docs.adonisjs.com/guides/basics/routing</em></a></blockquote></div></div></section><section name="071d" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="4fed" id="4fed" class="graf graf--h3 graf--leading">Conclusion</h3><p name="3713" id="3713" class="graf graf--p graf-after--h3">Adonis.js shifts the focus from configuring tools to building actual business logic. By fully embracing its integrated ecosystem, any developer can scale an application efficiently, ensuring enterprise-grade architecture right from day one.</p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/the-hidden-power-of-adonis-js-701df8d8b071" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="whats-new-in-java-26-release.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">What’s new in Java 26 release</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="node-js-25-brings-biggest-optimisation.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Node.js 25 brings Biggest Optimisation</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

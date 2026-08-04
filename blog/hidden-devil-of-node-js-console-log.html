@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hidden devil of Node.js : console.log · Mohit Malhotra</title>
+  <meta name="description" content="Exposing the hidden trap of console.log" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/hidden-devil-of-node-js-console-log-380208e92c53" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Hidden devil of Node.js : console.log" />
+  <meta property="og:description" content="Exposing the hidden trap of console.log" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Node.js</span></div>
+      <h1 class="article__title">Hidden devil of Node.js : console.log</h1>
+      <p class="article__subtitle">Exposing the hidden trap of console.log</p>
+      <div class="article__meta">
+        <span>Nov 15, 2025</span>
+        <span aria-hidden="true">·</span>
+        <span>3 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="0741" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><p name="e705" id="e705" class="graf graf--p graf-after--h4">Thinking <code class="markup--code markup--p-code">console.log</code> is just harmless debugging? Think again, this innocent line may be sabotaging your Node.js app in ways you never imagined.</p><p name="90ad" id="90ad" class="graf graf--p graf-after--p">This function call is probably the most used one by the developers across the globe, yet you won’t find it in production codebase of established organisations. If you have ever wondered why, then this article is for you.</p><figure name="15e8" id="15e8" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*nMQYOkIZMxbNMl5I" data-width="5184" data-height="3888" src="../assets/blog/hidden-devil-of-node-js-console-log/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@6heinz3r?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@6heinz3r?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">Gabriel Heinzer</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><h3 name="f6b8" id="f6b8" class="graf graf--h3 graf-after--figure">My Weekend Experiment</h3><p name="4305" id="4305" class="graf graf--p graf-after--h3">I was thinking about the issues of synchronous logging in Node.js this weekend and hence decided to run some test demonstrations over it. I wrote a super simple express server with <code class="markup--code markup--p-code">GET</code> API <code class="markup--code markup--p-code">/products</code> which reads and process objects from database. I ran 3 tests as follows</p><ul class="postList"><li name="0169" id="0169" class="graf graf--li graf-after--p"><strong class="markup--strong markup--li-strong">Test 1 </strong>: clean and simple without any logs</li><li name="b062" id="b062" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Test 2</strong> : added just single console.log in the route handler</li><li name="596c" id="596c" class="graf graf--li graf-after--li"><strong class="markup--strong markup--li-strong">Test 3 </strong>: added multiple console.log in the codebase</li></ul><figure name="8054" id="8054" class="graf graf--figure graf-after--li"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*_bNhxWtzLjlw4esauAlPVw.png" data-width="1686" data-height="900" src="../assets/blog/hidden-devil-of-node-js-console-log/img-02.png"><figcaption class="imageCaption">Test 1 : clean code without any log</figcaption></figure><figure name="628a" id="628a" class="graf graf--figure graf-after--figure"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*D4mfp7U-_e3rcIqKMSIooQ.png" data-width="1686" data-height="938" src="../assets/blog/hidden-devil-of-node-js-console-log/img-03.png"><figcaption class="imageCaption">Test 2 : Innocent console.log hiding in handler</figcaption></figure><figure name="3c93" id="3c93" class="graf graf--figure graf-after--figure"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*-MXg41McRoyTN4hiDr-Bcw.png" data-width="1686" data-height="1012" src="../assets/blog/hidden-devil-of-node-js-console-log/img-04.png"><figcaption class="imageCaption">Test 3 : Multiple console.log calls</figcaption></figure><p name="92df" id="92df" class="graf graf--p graf-after--figure">These changes may appear harmless to you and mostly ignored by many devs while doing PR reviews. Why not? After all they are there for logging purposes. Lets understand what this console.log does underneath.</p><p name="eba0" id="eba0" class="graf graf--p graf-after--p"><code class="markup--code markup--p-code">console.log(…)</code> invoked <code class="markup--code markup--p-code">process.stdout.write(...)</code> which actually write the output on TTY (terminal) which is nothing but a file descriptor. Whats bad is this call is synchronous in nature, hence literally blocks the event loop. Since everything in Node relies on event loop for execution, you can imagine the kind of impact it cause to performance. console.log by design does not use any libuv thread to log asynchronously, hence more such sync log statements in the code, more blocking for the event loop.</p><p name="e350" id="e350" class="graf graf--p graf-after--p">Well if you still think console.log is innocent, have a look at the results</p><figure name="b362" id="b362" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*cVtuWCbwKsbqpsr40uUxSQ.png" data-width="781" data-height="549" src="../assets/blog/hidden-devil-of-node-js-console-log/img-05.png"><figcaption class="imageCaption">Test 1 : no logs at all</figcaption></figure><figure name="58c0" id="58c0" class="graf graf--figure graf-after--figure"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*eoqAzkNKL9xxV4wmKODOnQ.png" data-width="757" data-height="546" src="../assets/blog/hidden-devil-of-node-js-console-log/img-06.png"><figcaption class="imageCaption">Test 2 : just one log</figcaption></figure><figure name="a0b3" id="a0b3" class="graf graf--figure graf-after--figure graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*5nxz6qxvNJ_k3sYAEbkYLw.png" data-width="763" data-height="547" src="../assets/blog/hidden-devil-of-node-js-console-log/img-07.png"><figcaption class="imageCaption">Test 3 : multiple logs</figcaption></figure></div></div></section><section name="3432" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="c44f" id="c44f" class="graf graf--h3 graf--leading"><strong class="markup--strong markup--h3-strong">The browser story is different</strong></h3><p name="403c" id="403c" class="graf graf--p graf-after--h3 graf--trailing">Surprisingly frontend developers won’t agree to this fact, because <code class="markup--code markup--p-code">console.log</code> works different browsers. It actually buffers the bytes and immediately return while actual write happens asynchronously. DevTools in the browser does this async write to the dev console keeping <code class="markup--code markup--p-code">console.log</code> non blocking. <em class="markup--em markup--p-em">But sadly thats not the case on Node.js.</em></p></div></div></section><section name="73f2" class="section section--body section--last"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="958e" id="958e" class="graf graf--h3 graf--leading">Conclusion</h3><p name="2ee8" id="2ee8" class="graf graf--p graf-after--h3">Understanding the technology at depth is a must in backend engineering.<br>When we use few logs, difference is not obvious in the performance but once they are used in iterations or high frequency regions of codebase, it start doing more and more damage.</p><figure name="f8f9" id="f8f9" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*mLPSvbzAF7mGdP6IYxyAIA.jpeg" data-width="1080" data-height="1080" src="../assets/blog/hidden-devil-of-node-js-console-log/img-08.jpg"><figcaption class="imageCaption">Meme by <a href="https://www.google.com/url?sa=t&amp;source=web&amp;rct=j&amp;opi=89978449&amp;url=https://www.instagram.com/coding.lol/&amp;ved=2ahUKEwjanvuTjvSQAxVR3TgGHezaIpgQFnoECDMQAQ&amp;usg=AOvVaw2o5CtCTofW2cSDml0bs0hQ" data-href="https://www.google.com/url?sa=t&amp;source=web&amp;rct=j&amp;opi=89978449&amp;url=https://www.instagram.com/coding.lol/&amp;ved=2ahUKEwjanvuTjvSQAxVR3TgGHezaIpgQFnoECDMQAQ&amp;usg=AOvVaw2o5CtCTofW2cSDml0bs0hQ" class="markup--anchor markup--figure-anchor" rel="noopener" target="_blank">coding.lol</a></figcaption></figure><blockquote name="9568" id="9568" class="graf graf--pullquote graf-after--figure">Anything that blocks event loop in Node.js must be evaluated to keep it performant. Hence console.log should be a big NO when you review your next PR. Instead use async logging modules like <a href="https://www.npmjs.com/package/pino" data-href="https://www.npmjs.com/package/pino" class="markup--anchor markup--pullquote-anchor" rel="noopener" target="_blank">pino</a> and <a href="https://www.npmjs.com/package/winston" data-href="https://www.npmjs.com/package/winston" class="markup--anchor markup--pullquote-anchor" rel="noopener" target="_blank">winston</a>.</blockquote>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/hidden-devil-of-node-js-console-log-380208e92c53" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="develop-high-performance-microservices-with-c.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Develop High Performance Microservices with C++</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="ditch-elasticsearch-use-postgres-for-full-text-search-instead.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">Ditch ElasticSearch! Use Postgres for Full-Text Search Instead</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>

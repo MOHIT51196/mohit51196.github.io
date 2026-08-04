@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAGA architecture for microservices · Mohit Malhotra</title>
+  <meta name="description" content="SAGA pattern in microservices for handling transactions in distributed system" />
+  <meta name="author" content="Mohit Malhotra" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="canonical" href="https://medium.com/@mohit-malhotra/scaling-microservices-with-saga-f17eadba840b" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="SAGA architecture for microservices" />
+  <meta property="og:description" content="SAGA pattern in microservices for handling transactions in distributed system" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/terminal.css" />
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a href="../index.html" class="nav__logo" data-magnetic data-hover>MM<span>.</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="../index.html" data-hover>About</a>
+      <a href="../journey.html" data-hover>Journey</a>
+      <a href="../work.html" data-hover>Work</a>
+      <a href="index.html" class="is-active" data-hover>Blog</a>
+      <a href="../contact.html" data-hover>Contact</a>
+    </nav>
+    <div class="nav__side">
+      <button class="nav__term" id="terminalOpen" aria-label="Open terminal" data-hover>&gt;_</button>
+      <a href="../contact.html" class="nav__cta" data-magnetic data-hover>Say hello</a>
+    </div>
+    <button class="nav__burger" id="navBurger" aria-label="Open menu" aria-expanded="false" data-hover>
+      <span></span><span></span>
+    </button>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav aria-label="Mobile">
+      <a href="../index.html">About</a>
+      <a href="../journey.html">Journey</a>
+      <a href="../work.html">Work</a>
+      <a href="index.html">Blog</a>
+      <a href="../contact.html">Contact</a>
+    </nav>
+  </div>
+
+  <main class="article">
+    <header class="article__hero">
+      <a class="article__back" href="index.html" data-hover>← All articles</a>
+      <div class="tag-row article__tags"><span class="tag">Distributed Systems</span></div>
+      <h1 class="article__title">SAGA architecture for microservices</h1>
+      <p class="article__subtitle">SAGA pattern in microservices for handling transactions in distributed system</p>
+      <div class="article__meta">
+        <span>Aug 11, 2023</span>
+        <span aria-hidden="true">·</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+
+    <article class="prose">
+<section name="6aee" class="section section--body section--first"><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><figure name="c75e" id="c75e" class="graf graf--figure graf-after--h4"><img loading="lazy" decoding="async" class="graf-image" data-image-id="0*R6CZcKonU6NWxyPO" data-width="5976" data-height="3992" src="../assets/blog/saga-architecture-for-microservices/img-01.jpg"><figcaption class="imageCaption">Photo by <a href="https://unsplash.com/@david_watkis?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com/@david_watkis?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-creator noopener" target="_blank">David Watkis</a> on <a href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" data-href="https://unsplash.com?utm_source=medium&amp;utm_medium=referral" class="markup--anchor markup--figure-anchor" rel="photo-source noopener" target="_blank">Unsplash</a></figcaption></figure><p name="6386" id="6386" class="graf graf--p graf-after--figure graf--trailing">You must be aware about transactions in databases. Databases follow ACID properties to keep a transactions atomic, consistent, isolated and durable. But in a larger ecosystem, a workflow of a feature has a chain of such transactions which needs to happen on different microservices with their own separate database. One classic example can be a user registers on some finance app where request is handled by user service then request is given to identity service for KYC verification which later on goes to wallet service to create the wallet and chain goes on. Now this flow is actually a distributed transaction. System should be able to commit as well as rollback such a transaction (chain of requests).</p></div></div></section><section name="d8f2" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="9f86" id="9f86" class="graf graf--h3 graf--leading">What is the problem ?</h3><p name="69e5" id="69e5" class="graf graf--p graf-after--h3">Distributed enterprise software system with multiple microservices handles the request as a distributed transaction which does not follow ACID properties by default. If one stage fails to process the request, prior stages should rollback and if request succeeds then post stages should handle request in an order. Such distributed transactions should be atomic, consistent, isolated and durable. A mechanism is required to make these distributed transaction ACID compiant.</p><figure name="f21f" id="f21f" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*15vbgUSNrvpXN24CGsyL1w.jpeg" data-width="600" data-height="336" src="../assets/blog/saga-architecture-for-microservices/img-02.jpg"><figcaption class="imageCaption">Meme from <a href="http://makememe.org/" data-href="http://makememe.org/" class="markup--anchor markup--figure-anchor" rel="nofollow noopener noopener" target="_blank">http://makememe.org/</a></figcaption></figure></div></div></section><section name="b125" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="8c8e" id="8c8e" class="graf graf--h3 graf--leading">What is SAGA ?</h3><p name="ebd4" id="ebd4" class="graf graf--p graf-after--h3">Saga is a architecture pattern that lets us manage distributed transactions in a microservice architecture. It helps to keep these distributed transaction ACID compliant. Now SAGA can be implemented broadly in two ways</p><ol class="postList"><li name="0534" id="0534" class="graf graf--li graf-after--p">Orchestration</li><li name="aa2d" id="aa2d" class="graf graf--li graf-after--li graf--trailing">Choreography</li></ol></div></div></section><section name="833e" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="9b0e" id="9b0e" class="graf graf--h4 graf--leading">Orchestration</h4><p name="92d8" id="92d8" class="graf graf--p graf-after--h4">As you can see in the diagram, system comprises of multiple service in which an orchestrator service is present. This orchestrator is responsible for managing the lifecycle of the distributed transaction which going through different microservices. If there is any failure reported by any microservice, orchestrator should signal a rollback to the previous services. Whereas if there is a success, orchestrator should invoke the next microservice in the flow of that transaction. Orchestrator service can be referred as <strong class="markup--strong markup--p-strong">SAGA execution coordinator</strong> (SEC).</p><figure name="e408" id="e408" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*oqO2jw-Vy3SWkROsUqApSQ.jpeg" data-width="546" data-height="311" src="../assets/blog/saga-architecture-for-microservices/img-03.jpg"><figcaption class="imageCaption">SAGA Orchestration Pattern</figcaption></figure><p name="726d" id="726d" class="graf graf--p graf-after--figure">By using orchestrator, you make the microservices more decoupled by concentrating the responsibility of orchestrating/managing the distributed transaction flow to orchestrator.</p><p name="fda7" id="fda7" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Advantages</strong></p><ul class="postList"><li name="4323" id="4323" class="graf graf--li graf-after--p">Microservices are decoupled by concentrating the responsibility of orchestrating the distributed transaction flow on orchestrator service</li><li name="ebe3" id="ebe3" class="graf graf--li graf-after--li">Changes in stages of transaction will not require redeployment of any microservice</li><li name="a736" id="a736" class="graf graf--li graf-after--li">Observability is higher compared to choreography because of single point of control</li><li name="e8cc" id="e8cc" class="graf graf--li graf-after--li">Automated testing is easier compared to choreography</li></ul><p name="d1fe" id="d1fe" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">Disadvantages</strong></p><ul class="postList"><li name="891d" id="891d" class="graf graf--li graf-after--p">Orchestrator is a single point of failure (need to ensure very high availability)</li><li name="e3a2" id="e3a2" class="graf graf--li graf-after--li graf--trailing">Complex to implement (frameworks like Apache Camel are available)</li></ul></div></div></section><section name="6766" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h4 name="e2be" id="e2be" class="graf graf--h4 graf--leading">Choreography</h4><p name="6fcb" id="6fcb" class="graf graf--p graf-after--h4">Choreography as the name suggest is when each component (microservice here) in the system knows what action to perform on a particular trigger. This pattern does not require orchestrator where as the responsibility to perform action (or series of action) on a given signal is with individual microservice.</p><figure name="a068" id="a068" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*92GDjVJHpQfV8U3rabxR5A.jpeg" data-width="649" data-height="251" src="../assets/blog/saga-architecture-for-microservices/img-04.jpg"><figcaption class="imageCaption">SAGA Choreography Pattern</figcaption></figure><p name="4b4a" id="4b4a" class="graf graf--p graf-after--figure">A message queue or any kind of event mechanism is used to shared the events generated from one microservice to all others. Depending on such events , different microservice can perform a commit or a rollback at individual level. Choreography is most widely used SAGA pattern.</p><p name="d21d" id="d21d" class="graf graf--p graf-after--p"><strong class="markup--strong markup--p-strong">Advantage</strong></p><ul class="postList"><li name="f8d7" id="f8d7" class="graf graf--li graf-after--p">No single point of failure as there is no need of orchestrator service</li><li name="ee92" id="ee92" class="graf graf--li graf-after--li">Easier to implement as each microservice handles it own events (or triggers)</li></ul><p name="768b" id="768b" class="graf graf--p graf-after--li"><strong class="markup--strong markup--p-strong">Disadvantage</strong></p><ul class="postList"><li name="df90" id="df90" class="graf graf--li graf-after--p">Automated testing and debugging is really difficult</li><li name="f81a" id="f81a" class="graf graf--li graf-after--li graf--trailing">Observability is low compared to orchestration</li></ul></div></div></section><section name="11c3" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="44ea" id="44ea" class="graf graf--h3 graf--leading">Short note for you</h3><p name="ad86" id="ad86" class="graf graf--p graf-after--h3">I have written this story after getting the results from the poll done on my LinkedIn profile. Feel free to follow me on LinkedIn for suggestions</p><p name="b7cb" id="b7cb" class="graf graf--p graf-after--p"><a href="https://www.linkedin.com/in/dev-mohit-malhotra/" data-href="https://www.linkedin.com/in/dev-mohit-malhotra/" class="markup--anchor markup--p-anchor" rel="noopener" target="_blank"><strong class="markup--strong markup--p-strong">https://www.linkedin.com/in/dev-mohit-malhotra/</strong></a></p><figure name="8332" id="8332" class="graf graf--figure graf-after--p graf--trailing"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*WJfZidYfc3jmyj_AgJS6bA.png" data-width="1022" data-height="474" src="../assets/blog/saga-architecture-for-microservices/img-05.png"></figure></div></div></section><section name="4350" class="section section--body"><div class="section-divider"><hr class="section-divider"></div><div class="section-content"><div class="section-inner sectionLayout--insetColumn"><h3 name="f2f1" id="f2f1" class="graf graf--h3 graf--leading">Conclusion</h3><p name="711b" id="711b" class="graf graf--p graf-after--h3">Handling of distributed transaction is core thing for enterprise level distributed software system as distributed architectures does not offer guarrantees.</p><figure name="b918" id="b918" class="graf graf--figure graf-after--p"><img loading="lazy" decoding="async" class="graf-image" data-image-id="1*4isWhgRjMJfR1hAQTR_Sjw.jpeg" data-width="600" data-height="391" src="../assets/blog/saga-architecture-for-microservices/img-06.jpg"><figcaption class="imageCaption">Meme from <a href="http://makememe.org/" data-href="http://makememe.org/" class="markup--anchor markup--figure-anchor" rel="nofollow noopener" target="_blank">http://makememe.org/</a></figcaption></figure><blockquote name="d785" id="d785" class="graf graf--pullquote graf--startsWithDoubleQuote graf-after--figure">“ Knowledge about available architectural patterns such as SAGA is critical while designing a distributed system as it helps you choose the best suited software architectural approach after considering the tradeoffs. “</blockquote><p name="e5c6" id="e5c6" class="graf graf--p graf-after--pullquote"><strong class="markup--strong markup--p-strong">Don’t forget to follow me on Medium for more such content and give a clap if you like it.</strong></p>
+    </article>
+
+    <footer class="article__footer">
+      <a class="article__back" href="index.html" data-hover>← Back to all articles</a>
+      <div class="article__actions">
+        <a class="btn btn--ghost" href="https://medium.com/@mohit-malhotra/scaling-microservices-with-saga-f17eadba840b" target="_blank" rel="noopener" data-magnetic data-hover>Read on Medium ↗</a>
+        <a class="btn btn--solid" href="../contact.html" data-magnetic data-hover>Work with me</a>
+      </div>
+      <nav class="article__nav" aria-label="More articles">
+      <a class="article__neighbor article__neighbor--prev" href="software-engineering-is-an-art-not-a-profession.html" data-hover>
+        <span class="article__neighbor-label">← Newer</span>
+        <span class="article__neighbor-title">Software Engineering Is An Art Not A Profession</span>
+      </a>
+      <a class="article__neighbor article__neighbor--next" href="3-advanced-software-principles-you-must-know.html" data-hover>
+        <span class="article__neighbor-label">Older →</span>
+        <span class="article__neighbor-title">3 Advanced software principles you must know</span>
+      </a>
+      </nav>
+    </footer>
+  </main>
+
+  <footer class="footer">
+    <span class="footer__spacer" aria-hidden="true"></span>
+    <span class="footer__center">
+      Designed &amp; built by hand. No frameworks harmed.<span class="footer__sep" aria-hidden="true">·</span><span id="footerYear"></span>
+    </span>
+    <nav class="footer__socials" id="footerSocials" aria-label="Social links"></nav>
+  </footer>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script defer src="../js/content.js"></script>
+  <script defer src="../js/blog-data.js"></script>
+  <script defer src="../js/main.js"></script>
+  <script defer src="../js/terminal.js"></script>
+</body>
+</html>
